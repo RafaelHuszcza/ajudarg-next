@@ -11,7 +11,57 @@ export async function GET() {
     return NextResponse.json({ message: 'Erro no servidor' }, { status: 500 })
   }
 }
+// TODO - With credentials
+// export async function POST() {
+//   const session = await getServerSessionWithAuth()
+//   if (!session) {
+//     return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+//       status: 401,
+//     })
+//   }
+//   // await prisma.local.create({
+//   //           data: {
+//   //             name: marker.name,
+//   //             lat: marker.lat,
+//   //             lng: marker.lng,
+//   //             type: marker.type,
+//   //             needs: marker.needs,
+//   //             address: marker.address,
+//   //             vacancies: 0,
+//   //             occupation: 0,
+//   //             responsibleUserId: admin.id,
+//   //             hours: marker.hours,
+//   //           },
+//   //         })
+// }
 
+// TODO - Only the responsible
+// export async function PUT() {
+//   const session = await getServerSessionWithAuth()
+//   if (!session) {
+//     return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+//       status: 401,
+//     })
+//   }
+
+//   await prisma.local.update({
+//     where: { id: marker.id },
+//     data: {
+//       name: marker.name,
+//       lat: marker.lat,
+//       lng: marker.lng,
+//       type: marker.type,
+//       needs: marker.needs,
+//       address: marker.address,
+//       vacancies: 0,
+//       occupation: 0,
+//       responsibleUserId: admin.id,
+//       hours: marker.hours,
+//     },
+//   })
+// }
+
+// // just commented code
 // export async function POST() {
 //   const admin = await prisma.user.findFirst({
 //     where: { email: 'rafaelhuszcza@gmail.com' },
