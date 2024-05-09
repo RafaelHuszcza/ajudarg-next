@@ -1,13 +1,18 @@
 import { GroupsTable } from './_components/groups-table'
-
-export default async function Page() {
-  const getGroups = async () => {
+const getGroups = async () => {
+  try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/groups`, {
       method: 'GET',
-      cache: 'no-cache',
+      next: { revalidate: 3600 * 4 },
     })
     return await response.json()
+  } catch (e) {
+    console.log({ e })
+    return []
   }
+}
+
+export default async function Page() {
   const groups = await getGroups()
   return (
     <main className="flex flex-1 justify-center p-12">

@@ -1,10 +1,15 @@
 import { PhonesTable } from './_components/phones-table'
 const getPhones = async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/phones`, {
-    method: 'GET',
-    cache: 'no-cache',
-  })
-  return await response.json()
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/phones`, {
+      method: 'GET',
+      next: { revalidate: 3600 * 4 },
+    })
+    return await response.json()
+  } catch (e) {
+    console.log({ e })
+    return []
+  }
 }
 export default async function Page() {
   const phones = await getPhones()

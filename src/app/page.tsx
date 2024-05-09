@@ -1,21 +1,31 @@
 import dynamic from 'next/dynamic'
 
 const getMarkers = async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/markers`, {
-    method: 'GET',
-    cache: 'no-cache',
-  })
-  return await response.json()
-}
-const getRiskAreas = async () => {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/risk-areas`,
-    {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/markers`, {
       method: 'GET',
       cache: 'no-cache',
-    },
-  )
-  return await response.json()
+    })
+    return await response.json()
+  } catch (e) {
+    console.log({ e })
+    return []
+  }
+}
+const getRiskAreas = async () => {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/api/risk-areas`,
+      {
+        method: 'GET',
+        cache: 'force-cache',
+      },
+    )
+    return await response.json()
+  } catch (e) {
+    console.log({ e })
+    return []
+  }
 }
 
 const DynamicMap = dynamic(() => import('../components/maps'), {
