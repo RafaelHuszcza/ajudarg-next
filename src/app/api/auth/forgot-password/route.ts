@@ -25,14 +25,17 @@ export async function POST(request: Request) {
     existingUser.resetToken = passwordResetToken
     existingUser.resetTokenExpiry = new Date(resetTokenExpiry)
 
-    const resetUrl = `http://${process.env.NEXT_PUBLIC_URL}/auth/reset-password/${resetToken}`
+    // const resetUrl = `http://${process.env.NEXT_PUBLIC_URL}/auth/reset-password/${resetToken}`
     await prisma.user.update({
       where: {
         email,
       },
       data: existingUser,
     })
-    return NextResponse.json({ message: resetUrl })
+    return NextResponse.json({
+      message: 'Serviço de email temporariamente desabilitado',
+    })
+    // return NextResponse.json({ message: resetUrl })
     // const body = `Reset sua senha clicando <a href="${resetUrl}">${resetUrl}</a>`
     // const msg = {
     //   to: email,
