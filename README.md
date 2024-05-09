@@ -29,6 +29,33 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## TO-DO
-POST Route on markers (Only with logged in users)
-PUT Route on markers (Only with authenticated session and needs to be the owner of the marker/shellter)
+# TODO List
+
+## Marker Features
+- **POST Route for Creating New Markers (Logged-in Users Only)**:
+  - Create a POST route for adding new markers.
+  - Ensure that this route is restricted to logged-in users.
+  - Implement proper validation and authentication.
+- **PUT Route for Updating Markers (Owners Only)**:
+  - Implement a PUT route for updating existing markers.
+  - Ensure that this route requires an authenticated session and that the user is the owner of the marker/shelter.
+  - Implement checks to confirm ownership before allowing updates.
+- **GET Markers for Editing**:
+  - Implement a route to get the list of markers in a table or list format.
+  - Reference for UI design: [ShadCN Data Table](https://ui.shadcn.com/docs/components/data-table).
+  - Ensure this route is accessible only to users with editing permissions.
+
+- **Adjust Marker Visualization to Show Occupied and Available Vacancies**:
+  - Update the visualization to clearly distinguish between occupied and available vacancies.
+  - Consider adding a legend or using different colors to indicate the status.
+
+## Access Control and User Management
+- **Disable Public Registration Route or Create a Private Route for User Registration**:
+  - Disable the public registration route to prevent unauthorized user creation.
+  - Create a private route exclusively for API or ADMIN user to  managers to register new users.
+  - Ensure the private route is protected by appropriate authentication and authorization.
+
+- **Transfer Shelter Ownership to Responsible Users**:
+  - Update ownership logic to assign shelters to specific responsible users instead of all shelters being under the admin user. (Could be directly in the Database or with prisma studio)
+  - Ensure only responsible users have full control over their respective shelter.
+
