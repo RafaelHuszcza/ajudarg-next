@@ -55,4 +55,6 @@ model Local {
   responsibleUserId String
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+  WhatsApp          String?
+  meals             Int?
 }

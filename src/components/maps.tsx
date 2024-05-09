@@ -74,6 +74,7 @@ const Map = ({ markers, risks }: MapsProps) => {
   const closeMarket = () => {
     setMarkerOpen(null)
   }
+  console.log(markers)
   return (
     <>
       <Sheet open={!!marketOpen} onOpenChange={closeMarket}>
@@ -101,24 +102,19 @@ const Map = ({ markers, risks }: MapsProps) => {
               console.log(area.properties.fill)
               return (
                 <Polygon
-                  eventHandlers={{
-                    click: () => {
-                      console.log(area.properties.desc)
-                    },
-                  }}
                   weight={2}
                   fillColor={area.properties.fill}
                   fillOpacity={area.properties['fill-opacity'] * 0.5}
                   opacity={area.properties['stroke-opacity'] * 0.5}
                   color={area.properties.stroke}
                   stroke={true}
-                  // className="stroke-w-2 fill-red-400 stroke-red-500"
-
                   positions={positions as LatLngExpression[]}
                   key={index}
                 >
                   <Popup>
-                    <h3>{area.properties.desc}</h3>
+                    <h3
+                      dangerouslySetInnerHTML={{ __html: area.properties.desc }}
+                    />
                   </Popup>
                 </Polygon>
               )
@@ -148,6 +144,7 @@ const Map = ({ markers, risks }: MapsProps) => {
                   <header className="text-center text-lg font-bold">
                     <h3>{marker.type}</h3>
                   </header>
+                  <a className="font-semibold">{marker.address}</a>
                   <ul className="text-sm font-light">
                     {marker.needs.length > 0 &&
                       marker.needs.map((need, _) => <li key={_}>{need}</li>)}

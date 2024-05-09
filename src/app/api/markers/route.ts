@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 
+// import { z } from 'zod'
+// import { getServerSessionWithAuth } from '@/services/auth'
 import { prisma } from '@/services/database'
 
 export async function GET() {
@@ -11,28 +13,60 @@ export async function GET() {
     return NextResponse.json({ message: 'Erro no servidor' }, { status: 500 })
   }
 }
+
 // TODO - With credentials
-// export async function POST() {
+
+// export async function POST(request: Request) {
+//   const marker = await request.json()
+
 //   const session = await getServerSessionWithAuth()
 //   if (!session) {
 //     return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
 //       status: 401,
 //     })
 //   }
-//   // await prisma.local.create({
-//   //           data: {
-//   //             name: marker.name,
-//   //             lat: marker.lat,
-//   //             lng: marker.lng,
-//   //             type: marker.type,
-//   //             needs: marker.needs,
-//   //             address: marker.address,
-//   //             vacancies: 0,
-//   //             occupation: 0,
-//   //             responsibleUserId: admin.id,
-//   //             hours: marker.hours,
-//   //           },
-//   //         })
+//   const markerSchema = z.object({
+//     email: z
+//       .string({ required_error: 'Email é requerido' })
+//       .email('Email Inválido'),
+//     password: z
+//       .string({ required_error: 'Senha é requerida' })
+//       .min(1, 'Senha é requerida'),
+//   })
+//   type FormData = z.infer<typeof markerSchema>
+
+//   const markersValidate: FormData = markerSchema.parse(marker)
+
+//   const { user } = session
+//   if (!user) {
+//     return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+//       status: 401,
+//     })
+//   }
+//   if (!user.email)
+//     return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+//       status: 401,
+//     })
+
+//   const userDB = await prisma.user.findFirst({
+//     where: { email: user.email },
+//     select: { id: true },
+//   })
+
+//   await prisma.local.create({
+//     data: {
+//       name: marker.name,
+//       lat: marker.lat,
+//       lng: marker.lng,
+//       type: marker.type,
+//       needs: marker.needs,
+//       address: marker.address,
+//       vacancies: 0,
+//       occupation: 0,
+//       responsibleUserId: admin.id,
+//       hours: marker.hours,
+//     },
+//   })
 // }
 
 // TODO - Only the responsible
