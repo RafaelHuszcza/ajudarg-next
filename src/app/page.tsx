@@ -8,7 +8,7 @@ const getMarkers = async () => {
     })
     return await response.json()
   } catch (e) {
-    console.log({ e })
+    console.log(e)
     return []
   }
 }
@@ -18,12 +18,12 @@ const getRiskAreas = async () => {
       `${process.env.NEXT_PUBLIC_URL}/api/risk-areas`,
       {
         method: 'GET',
-        cache: 'force-cache',
+        cache: 'no-cache',
       },
     )
     return await response.json()
   } catch (e) {
-    console.log({ e })
+    console.log(e)
     return []
   }
 }

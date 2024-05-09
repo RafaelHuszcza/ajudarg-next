@@ -3,11 +3,11 @@ const getGroups = async () => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/groups`, {
       method: 'GET',
-      next: { revalidate: 3600 * 4 },
+      cache: 'no-cache',
     })
     return await response.json()
   } catch (e) {
-    console.log({ e })
+    console.log(e)
     return []
   }
 }

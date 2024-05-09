@@ -31,21 +31,22 @@ export function PhonesTable({ phones }: PhonesTableProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {phones.map((phone) => (
-            <TableRow key={phone.id}>
-              <TableCell className="text-center font-medium">
-                {phone.name}
-              </TableCell>
-              <TableCell className="text- text-center">
-                <a
-                  className="text-blue-600 underline visited:text-purple-600 hover:text-blue-800"
-                  href={phone.href}
-                >
-                  {phone.number}
-                </a>
-              </TableCell>
-            </TableRow>
-          ))}
+          {phones.length > 0 &&
+            phones.map((phone) => (
+              <TableRow key={phone.id}>
+                <TableCell className="text-center font-medium">
+                  {phone.name}
+                </TableCell>
+                <TableCell className="text- text-center">
+                  <a
+                    className="text-blue-600 underline visited:text-purple-600 hover:text-blue-800"
+                    href={phone.href}
+                  >
+                    {phone.number}
+                  </a>
+                </TableCell>
+              </TableRow>
+            ))}
           <TableRow>
             <TableCell className="flex-1"></TableCell>
           </TableRow>

@@ -3,11 +3,11 @@ const getPhones = async () => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/phones`, {
       method: 'GET',
-      next: { revalidate: 3600 * 4 },
+      cache: 'no-cache',
     })
     return await response.json()
   } catch (e) {
-    console.log({ e })
+    console.log(e)
     return []
   }
 }

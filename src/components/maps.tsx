@@ -91,74 +91,75 @@ const Map = ({ markers, risks }: MapsProps) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {risks.map((area, index: number) => {
-          if (area.geometry.type === 'Polygon') {
-            const positions = area.geometry.coordinates[0].map((coord) => [
-              coord[1],
-              coord[0],
-            ])
-            console.log(area.properties.fill)
-            return (
-              <Polygon
-                eventHandlers={{
-                  click: () => {
-                    console.log(area.properties.desc)
-                  },
-                }}
-                weight={2}
-                fillColor={area.properties.fill}
-                fillOpacity={area.properties['fill-opacity'] * 0.5}
-                opacity={area.properties['stroke-opacity'] * 0.5}
-                color={area.properties.stroke}
-                stroke={true}
-                // className="stroke-w-2 fill-red-400 stroke-red-500"
+        {risks.length > 0 &&
+          risks.map((area, index: number) => {
+            if (area.geometry.type === 'Polygon') {
+              const positions = area.geometry.coordinates[0].map((coord) => [
+                coord[1],
+                coord[0],
+              ])
+              console.log(area.properties.fill)
+              return (
+                <Polygon
+                  eventHandlers={{
+                    click: () => {
+                      console.log(area.properties.desc)
+                    },
+                  }}
+                  weight={2}
+                  fillColor={area.properties.fill}
+                  fillOpacity={area.properties['fill-opacity'] * 0.5}
+                  opacity={area.properties['stroke-opacity'] * 0.5}
+                  color={area.properties.stroke}
+                  stroke={true}
+                  // className="stroke-w-2 fill-red-400 stroke-red-500"
 
-                positions={positions as LatLngExpression[]}
-                key={index}
+                  positions={positions as LatLngExpression[]}
+                  key={index}
+                >
+                  <Popup>
+                    <h3>{area.properties.desc}</h3>
+                  </Popup>
+                </Polygon>
+              )
+            }
+            return null
+          })}
+        {markers.length > 0 &&
+          markers.map((marker) => {
+            return (
+              <Marker
+                icon={
+                  marker.type === 'Ponto de voluntarização'
+                    ? RedIcon
+                    : marker.type === 'Abrigo'
+                      ? GoldIcon
+                      : BlueIcon
+                }
+                // eventHandlers={{
+                //   click: () => {
+                //     setMarkerOpen(marker)
+                //   },
+                // }}
+                key={marker.name}
+                position={[marker.lat, marker.lng]}
               >
                 <Popup>
-                  <h3>{area.properties.desc}</h3>
+                  <header className="text-center text-lg font-bold">
+                    <h3>{marker.type}</h3>
+                  </header>
+                  <ul className="text-sm font-light">
+                    {marker.needs.length > 0 &&
+                      marker.needs.map((need, _) => <li key={_}>{need}</li>)}
+                  </ul>
+                  <p>{marker.name}</p>
+                  <footer>
+                    <p>{marker.address}</p>
+                  </footer>
                 </Popup>
-              </Polygon>
+              </Marker>
             )
-          }
-          return null
-        })}
-        {markers.map((marker) => {
-          return (
-            <Marker
-              icon={
-                marker.type === 'Ponto de voluntarização'
-                  ? RedIcon
-                  : marker.type === 'Abrigo'
-                    ? GoldIcon
-                    : BlueIcon
-              }
-              eventHandlers={{
-                click: () => {
-                  setMarkerOpen(marker)
-                },
-              }}
-              key={marker.name}
-              position={[marker.lat, marker.lng]}
-            >
-              <Popup>
-                <header className="text-center text-lg font-bold">
-                  <h3>{marker.type}</h3>
-                </header>
-                <ul className="text-sm font-light">
-                  {marker.needs.map((need, _) => (
-                    <li key={_}>{need}</li>
-                  ))}
-                </ul>
-                <p>{marker.name}</p>
-                <footer>
-                  <p>{marker.address}</p>
-                </footer>
-              </Popup>
-            </Marker>
-          )
-        })}
+          })}
       </MapContainer>
     </>
   )

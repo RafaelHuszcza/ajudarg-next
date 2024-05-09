@@ -30,22 +30,23 @@ export function GroupsTable({ groups }: GroupsTableProps) {
           </TableRow>
         </TableHeader>
         <TableBody className="overflow-auto">
-          {groups.map((group) => (
-            <TableRow key={group.id}>
-              <TableCell className="text-center font-medium">
-                {group.name}
-              </TableCell>
-              <TableCell className="text- text-center">
-                <a
-                  className="text-blue-600 underline visited:text-purple-600 hover:text-blue-800"
-                  target="_blank"
-                  href={group.href}
-                >
-                  Grupo do WhatsApp
-                </a>
-              </TableCell>
-            </TableRow>
-          ))}
+          {groups.length > 0 &&
+            groups.map((group) => (
+              <TableRow key={group.id}>
+                <TableCell className="text-center font-medium">
+                  {group.name}
+                </TableCell>
+                <TableCell className="text- text-center">
+                  <a
+                    className="text-blue-600 underline visited:text-purple-600 hover:text-blue-800"
+                    target="_blank"
+                    href={group.href}
+                  >
+                    Grupo do WhatsApp
+                  </a>
+                </TableCell>
+              </TableRow>
+            ))}
           <TableRow>
             <TableCell className="flex-1"></TableCell>
           </TableRow>
