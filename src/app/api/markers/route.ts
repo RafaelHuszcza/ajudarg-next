@@ -38,6 +38,8 @@ export async function POST(request: Request) {
     WhatsApp: z.string({ required_error: 'WhatsApp é necessário' }).optional(),
     phone: z.string({ required_error: 'Telefone é necessário' }).optional(),
     meals: z.number().int({ message: 'Refeições é necessário' }).optional(),
+    vacancies: z.number({ required_error: 'Vagas é necessário' }),
+    occupation: z.number({ required_error: 'Ocupação é necessário' }),
   })
   type FormData = z.infer<typeof markerSchema>
 
@@ -77,8 +79,8 @@ export async function POST(request: Request) {
       type: marker.type,
       needs: marker.needs,
       address: marker.address,
-      vacancies: 0,
-      occupation: 0,
+      vacancies: marker.vacancies,
+      occupation: marker.occupation,
       responsibleUserId: userDB.id,
       hours: marker.hours,
       WhatsApp: marker.WhatsApp,

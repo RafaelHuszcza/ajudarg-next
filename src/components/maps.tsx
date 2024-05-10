@@ -227,22 +227,24 @@ const Map = ({ markers, risks }: MapsProps) => {
                     )}
                   </main>
                   <footer className="flex flex-col gap-2">
-                    <div className="flex justify-center gap-2">
-                      <Button
-                        variant="default"
-                        type="button"
-                        className="cursor-default text-sm font-semibold"
-                      >
-                        {marker.vacancies} vagas disponíveis
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        type="button"
-                        className="cursor-default text-sm font-semibold"
-                      >
-                        {marker.occupation} vagas ocupadas
-                      </Button>
-                    </div>
+                    {marker.type !== 'Arrecadação' && (
+                      <div className="flex justify-center gap-2">
+                        <Button
+                          variant="default"
+                          type="button"
+                          className="cursor-default text-sm font-semibold"
+                        >
+                          {marker.vacancies} vagas disponíveis
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          type="button"
+                          className="cursor-default text-sm font-semibold"
+                        >
+                          {marker.occupation} vagas ocupadas
+                        </Button>
+                      </div>
+                    )}
                     {marker.updatedAt && (
                       <span className="text-xs text-gray-400">
                         Atualizado em: {formatDate(marker.updatedAt)}
