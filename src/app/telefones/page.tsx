@@ -3,7 +3,7 @@ const getPhones = async () => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/phones`, {
       method: 'GET',
-      cache: 'no-cache',
+      next: { tags: ['groups'] },
     })
     return await response.json()
   } catch (e) {

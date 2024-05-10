@@ -1,4 +1,5 @@
 // import { hash } from 'bcrypt'
+import { revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
 
 import { prisma } from '@/services/database'
@@ -69,3 +70,7 @@ export async function GET() {
 //   )
 //   return NextResponse.json({ message: 'Grupos criados com sucesso' })
 // }
+export async function PUT() {
+  revalidateTag('phones')
+  return NextResponse.json({ message: 'Grupo atualizado com sucesso' })
+}

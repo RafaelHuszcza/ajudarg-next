@@ -1,4 +1,5 @@
 // import { hash } from 'bcrypt'
+import { revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
 
 // import { getServerSessionWithAuth } from '@/services/auth'
@@ -12,6 +13,25 @@ export async function GET() {
     console.log({ e })
     return NextResponse.json({ message: 'Erro no servidor' }, { status: 500 })
   }
+}
+export async function POST(request: Request) {
+  try {
+    const { name, href } = await request.json()
+    await prisma.group.create({
+      data: {
+        name,
+        href,
+      },
+    })
+    return NextResponse.json({ message: 'Grupo criado com sucesso' })
+  } catch (e) {
+    console.log({ e })
+    return NextResponse.json({ message: 'Erro no servidor' }, { status: 500 })
+  }
+}
+export async function PUT() {
+  revalidateTag('groups')
+  return NextResponse.json({ message: 'Grupo atualizado com sucesso' })
 }
 // export async function POST() {
 //   const groupData = [

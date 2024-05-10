@@ -3,7 +3,7 @@ const getGroups = async () => {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/groups`, {
       method: 'GET',
-      cache: 'no-cache',
+      next: { tags: ['groups'] },
     })
     return await response.json()
   } catch (e) {
