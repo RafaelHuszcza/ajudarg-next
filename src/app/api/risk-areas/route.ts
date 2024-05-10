@@ -1,7 +1,7 @@
 // import { hash } from 'bcrypt'
 import { NextResponse } from 'next/server'
 
-import riskareas from './riskAreas.json'
+import riskareas from './riskareas.json'
 
 export async function GET() {
   try {
