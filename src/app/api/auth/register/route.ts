@@ -1,11 +1,17 @@
 import { hash } from 'bcrypt'
 import { NextResponse } from 'next/server'
 
+import { getServerSessionWithAuth } from '@/services/auth'
 import { prisma } from '@/services/database'
 
 export async function POST(request: Request) {
   try {
-    console.log('request', request)
+    const session = await getServerSessionWithAuth()
+    if (!session) {
+      return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+        status: 401,
+      })
+    }
     const { email, password, name } = await request.json()
     const existingUser = await prisma.user.findFirst({ where: { email } })
     if (existingUser) {
