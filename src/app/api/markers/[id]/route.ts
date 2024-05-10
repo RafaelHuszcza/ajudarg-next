@@ -87,7 +87,7 @@ export async function PUT(
     })
   }
   await prisma.local.update({
-    where: { id: marker.id },
+    where: { id: markerId },
     data: {
       name: marker.name,
       lat: marker.lat,
