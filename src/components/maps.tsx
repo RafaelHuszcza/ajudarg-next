@@ -144,7 +144,13 @@ const Map = ({ markers, risks }: MapsProps) => {
                   <header className="text-center text-lg font-bold">
                     <h3>{marker.type}</h3>
                   </header>
-                  <a className="font-semibold">{marker.address}</a>
+                  <a
+                    target="_blank"
+                    href={`https://www.google.com/maps/dir//${marker.lat},${marker.lng}/@${marker.lat},${marker.lng},15z`}
+                    className="font-semibold"
+                  >
+                    {marker.address}
+                  </a>
                   <ul className="text-sm font-light">
                     {marker.needs.length > 0 &&
                       marker.needs.map((need, _) => <li key={_}>{need}</li>)}
