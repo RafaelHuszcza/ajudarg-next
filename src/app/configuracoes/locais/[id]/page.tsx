@@ -1,39 +1,26 @@
+'use client'
+import { useRouter } from 'next/navigation'
+
+import { useMarker } from '@/api-uses/markers/use-marker'
+
 import { AddMarkerForm } from '../_components/add-marker-form'
 
-const getMarker = async (id: string) => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/markers/${id}`,
-      {
-        method: 'GET',
-        cache: 'no-cache',
-      },
-    )
-    return await response.json()
-  } catch (e) {
-    console.log(e)
-    return {
-      needs: [],
-      address: '',
-      hours: '',
-      WhatsApp: '',
-      phone: '',
-      meals: 0,
-      responsibleEmail: '',
-    }
-  }
-}
-
-export default async function Page({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: { id: string } }) {
   const { id } = params
-  const defaultValues = await getMarker(id)
-  const newNeeds = defaultValues?.needs?.map((item: string) => ({
+  const { data, isLoading, isSuccess, isError } = useMarker(id)
+  const router = useRouter()
+  const newNeeds = data?.needs?.map((item: string) => ({
     value: item,
   }))
   const newDefaultValues = {
-    ...defaultValues,
-
-    needs: newNeeds || defaultValues.needs,
+    ...data,
+    needs: newNeeds || data?.needs,
   }
-  return <AddMarkerForm method="PUT" defaultValues={newDefaultValues} id={id} />
+  if (isLoading || !isSuccess) {
+    return <div>Carregando...</div>
+  }
+  if (isError) {
+    router.push('/configuracoes/locais')
+  }
+  return <AddMarkerForm method="PUT" defaultValues={newDefaultValues} />
 }

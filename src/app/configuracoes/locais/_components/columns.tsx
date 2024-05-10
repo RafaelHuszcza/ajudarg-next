@@ -29,6 +29,13 @@ export const columns: ColumnDef<Marker>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Tipo" />
     ),
+    cell: ({ row }) => {
+      return (
+        <div className="px-1 text-center font-medium">
+          {row.getValue('Tipo')}
+        </div>
+      )
+    },
     id: 'Tipo',
     enableSorting: true,
     enableHiding: true,
@@ -38,6 +45,13 @@ export const columns: ColumnDef<Marker>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Vagas Disponíveis" />
     ),
+    cell: ({ row }) => {
+      return (
+        <div className="px-1 text-center font-medium">
+          {row.getValue('vacancies')}
+        </div>
+      )
+    },
     enableSorting: true,
     enableHiding: false,
   },
@@ -46,6 +60,13 @@ export const columns: ColumnDef<Marker>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Vagas Ocupadas" />
     ),
+    cell: ({ row }) => {
+      return (
+        <div className="px-1 text-center font-medium">
+          {row.getValue('occupation')}
+        </div>
+      )
+    },
     enableSorting: true,
     enableHiding: false,
   },

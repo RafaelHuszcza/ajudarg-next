@@ -2,9 +2,9 @@
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { Row } from '@tanstack/react-table'
-import { Link } from 'lucide-react'
-import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
+import { useDeleteMarker } from '@/api-uses/markers'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -24,41 +24,19 @@ export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const marker = markersSchema.parse(row.original)
+  const deleteMarkerFnc = useDeleteMarker()
   const deleteMarker = async (id: string) => {
     const isConfirmed = window.confirm(
       'Tem certeza de que deseja excluir este local?',
     )
-
     if (!isConfirmed) {
       return
     }
-
-    try {
-      const response = await fetch(`/api/markers/${id}`, {
-        method: 'DELETE',
-        cache: 'no-cache',
-      })
-
-      const data = await response.json()
-
-      if (data.error) {
-        toast.error('Erro ao excluir local', {
-          description: 'Erro ao excluir local',
-        })
-        console.error(data.error)
-        return
-      }
-
-      toast.success('Excluir local', {
-        description: 'Local excluído com sucesso',
-      })
-    } catch (e) {
-      console.error('Erro ao excluir local:', e)
-      toast.error('Erro ao excluir local', {
-        description: 'Ocorreu um erro inesperado',
-      })
+    if (id !== undefined) {
+      deleteMarkerFnc.mutateAsync(id)
     }
   }
+  const router = useRouter()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -71,18 +49,19 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem asChild>
-          <Link
-            href={`/configuracoes/local/${marker.id}`}
-            className="flex items-center"
-          >
-            Editar
-          </Link>
+        <DropdownMenuItem
+          onClick={() => router.push(`/configuracoes/locais/${marker.id}`)}
+          className="cursor-pointer"
+        >
+          Editar
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Button onClick={() => deleteMarker(marker.id)}>Excluir</Button>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => deleteMarker(marker.id)}
+        >
+          Excluir
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

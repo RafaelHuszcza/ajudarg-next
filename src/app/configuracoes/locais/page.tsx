@@ -1,5 +1,6 @@
-import { redirect } from 'next/navigation'
+'use client'
+import { DataTableClient } from './_components/data-table-client'
 
 export default function Page() {
-  redirect('/configuracoes')
+  return <DataTableClient />
 }

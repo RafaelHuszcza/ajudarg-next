@@ -4,9 +4,9 @@ import { LoaderCircle, Plus, Trash } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import z from 'zod'
 
+import { useCreateMarker, useEditMarker } from '@/api-uses/markers'
 import { ErrorMessage } from '@/components/error-message'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -28,37 +28,35 @@ interface FormMarkers {
     meals?: number
     responsibleEmail: string
   }
-  id?: string
 }
+const formSchema = z.object({
+  name: z
+    .string({ required_error: 'Nome é necessário' })
+    .min(3, { message: 'Nome é necessário' }),
+  lat: z.coerce.number({ required_error: 'Latitude é necessária' }),
+  lng: z.coerce.number({ required_error: 'Longitude é necessária' }),
+  type: z.string({ required_error: 'Tipo é necessário' }).min(3, {
+    message: 'Tipo é necessário',
+  }),
+  needs: z.array(z.object({ value: z.string() })).default([]),
+  address: z.string({ required_error: 'Endereço é necessário' }).min(3, {
+    message: 'Endereço é necessário',
+  }),
+  hours: z.string({ required_error: 'Horário é necessário' }).optional(),
+  WhatsApp: z.string({ required_error: 'WhatsApp é necessário' }).optional(),
+  phone: z.string({ required_error: 'Telefone é necessário' }).optional(),
+  meals: z.coerce
+    .number()
+    .int({ message: 'Refeições é necessário' })
+    .optional(),
+  responsibleEmail: z
+    .string({ required_error: 'Email é necessário' })
+    .optional(),
+})
 
-export function AddMarkerForm({ id, method, defaultValues }: FormMarkers) {
+export type FormData = z.infer<typeof formSchema>
+export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
   const router = useRouter()
-  const formSchema = z.object({
-    name: z
-      .string({ required_error: 'Nome é necessário' })
-      .min(3, { message: 'Nome é necessário' }),
-    lat: z.coerce.number({ required_error: 'Latitude é necessária' }),
-    lng: z.coerce.number({ required_error: 'Longitude é necessária' }),
-    type: z.string({ required_error: 'Tipo é necessário' }).min(3, {
-      message: 'Tipo é necessário',
-    }),
-    needs: z.array(z.object({ value: z.string() })).default([]),
-    address: z.string({ required_error: 'Endereço é necessário' }).min(3, {
-      message: 'Endereço é necessário',
-    }),
-    hours: z.string({ required_error: 'Horário é necessário' }).optional(),
-    WhatsApp: z.string({ required_error: 'WhatsApp é necessário' }).optional(),
-    phone: z.string({ required_error: 'Telefone é necessário' }).optional(),
-    meals: z.coerce
-      .number()
-      .int({ message: 'Refeições é necessário' })
-      .optional(),
-    responsibleEmail: z
-      .string({ required_error: 'Email é necessário' })
-      .optional(),
-  })
-
-  type FormData = z.infer<typeof formSchema>
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -90,41 +88,25 @@ export function AddMarkerForm({ id, method, defaultValues }: FormMarkers) {
   const addNewNeed = () => {
     append({ value: '' })
   }
+  const createMarker = useCreateMarker()
+  const editMarker = useEditMarker()
   const onSubmit = handleSubmit(async (data: FormData) => {
     const formattedNeeds = data.needs.map((need) => need.value)
     console.log(formattedNeeds)
     const dataToSend = { ...data, needs: formattedNeeds }
-    try {
-      const response = await fetch(
-        `/api/markers/${method === 'PUT' ? id : ''}`,
-        {
-          method,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dataToSend),
-        },
-      )
-      const responseJson = await response.json()
-      if (response.ok) {
-        toast.success('Localização', {
-          description: responseJson.message,
-        })
-        router.push('/configuracoes/locais')
-      }
-      if (response.status === 400) {
-        toast.error('Localização', {
-          description: responseJson.message,
-        })
-      }
-    } catch (e) {
-      console.log(e)
-      toast.error('Localização', {
-        description: 'Erro no servidor',
-      })
+    if (method === 'PUT') {
+      editMarker.mutate(dataToSend)
+    }
+    if (method === 'POST') {
+      createMarker.mutate(dataToSend)
     }
   })
-
+  if (editMarker.isSuccess) {
+    router.push('/configuracoes/locais')
+  }
+  if (createMarker.isSuccess) {
+    router.push('/configuracoes/locais')
+  }
   return (
     <Card className="mx-auto my-12  h-auto   w-full max-w-[90%]   border-2 border-primary">
       <CardHeader className="space-y-1">

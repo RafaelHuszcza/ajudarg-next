@@ -2,6 +2,8 @@
 
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { Table } from '@tanstack/react-table'
+import { PlusCircle } from 'lucide-react'
+import Link from 'next/link'
 import { useState } from 'react'
 
 import { DataTableViewOptions } from '@/components/data-table/data-table-view-options'
@@ -66,6 +68,14 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
+      <Button asChild>
+        <Link className="flex gap-2" href="/configuracoes/locais/add">
+          Adicionar Local
+          <span>
+            <PlusCircle />
+          </span>
+        </Link>
+      </Button>
       <DataTableViewOptions table={table} />
     </div>
   )
