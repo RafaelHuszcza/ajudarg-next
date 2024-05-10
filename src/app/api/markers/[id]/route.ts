@@ -103,3 +103,68 @@ export async function PUT(
 
   return NextResponse.json({ message: 'Localização atualizado com sucesso' })
 }
+
+export async function DELETE(request: NextRequest,
+  { params }: { params: { id: string } },
+){
+  const markerId = params.id
+  if (!markerId) {
+    return new NextResponse(
+      JSON.stringify({ error: 'Localização não encontrada' }),
+      {
+        status: 404,
+      },
+    )
+  }
+
+  const session = await getServerSessionWithAuth()
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
+  }
+
+  const { user } = session
+  if (!user) {
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
+  }
+  if (!user.email)
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
+
+  const userDB = await prisma.user.findFirst({
+    where: { email: user.email },
+    select: { id: true },
+  })
+
+  if (!userDB) {
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
+  }
+  const markerDB = await prisma.local.findFirst({
+    where: { id: markerId },
+    select: { responsibleUserId: true },
+  })
+  if (!markerDB) {
+    return new NextResponse(
+      JSON.stringify({ error: 'Localização não encontrada' }),
+      { status: 404 },
+    )
+  }
+  if (markerDB.responsibleUserId !== userDB.id) {
+    return new NextResponse(
+      JSON.stringify({ error: 'Usuário não autorizado' }),
+      { status: 401 },
+    )
+  }
+
+  await prisma.local.delete({
+    where: { id: markerId },
+  })
+
+  return NextResponse.json({ message: 'Localização deletado com sucesso' }) 
+}
