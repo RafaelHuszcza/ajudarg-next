@@ -77,7 +77,9 @@ export async function PUT(
     WhatsApp: z.string({ required_error: 'WhatsApp é necessário' }).optional(),
     phone: z.string({ required_error: 'Telefone é necessário' }).optional(),
     meals: z.number().int({ message: 'Refeições é necessário' }).optional(),
-    responsibleEmail: z.string({ required_error: 'Email é necessário' }).optional(),
+    responsibleEmail: z
+      .string({ required_error: 'Email é necessário' })
+      .optional(),
   })
   type FormData = z.infer<typeof markerSchema>
 
@@ -114,16 +116,17 @@ export async function PUT(
       vacancies: marker.vacancies,
       occupation: marker.occupation,
       hours: marker.hours,
-      responsibleUserId: marker.responsibleUserId
+      responsibleUserId: marker.responsibleUserId,
     },
   })
 
   return NextResponse.json({ message: 'Localização atualizado com sucesso' })
 }
 
-export async function DELETE(request: NextRequest,
+export async function DELETE(
+  request: NextRequest,
   { params }: { params: { id: string } },
-){
+) {
   const markerId = params.id
   if (!markerId) {
     return new NextResponse(
@@ -183,7 +186,7 @@ export async function DELETE(request: NextRequest,
     where: { id: markerId },
   })
 
-  return NextResponse.json({ message: 'Localização deletado com sucesso' }) 
+  return NextResponse.json({ message: 'Localização deletado com sucesso' })
 }
 
 export async function GET(

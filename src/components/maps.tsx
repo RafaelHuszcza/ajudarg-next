@@ -30,6 +30,7 @@ type Markers = {
   hours?: string
   vacancies: number
   occupation: number
+  updatedAt: Date
 }
 type Risks = {
   type: string
@@ -62,6 +63,18 @@ const Map = ({ markers, risks }: MapsProps) => {
   const [coord, setCoord] = useState<LatLngExpression>([
     -32.0453936, -52.1160472,
   ])
+  const formatDate = (dateString: Date) => {
+    if (!dateString) return ''
+    const date = new Date(dateString)
+    // Change locale and options as needed
+    return date.toLocaleString('pt-BR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+    })
+  }
   function getIcon(color: string) {
     return new L.Icon({
       iconUrl:
@@ -210,25 +223,32 @@ const Map = ({ markers, risks }: MapsProps) => {
                     )}
                     {marker.hours && (
                       <span className="m-0 p-0 text-sm ">
-                        Horário de funcionamento: marker.hours
+                        Horário de funcionamento: {marker.hours}
                       </span>
                     )}
                   </main>
-                  <footer className="flex justify-center gap-2">
-                    <Button
-                      variant="default"
-                      type="button"
-                      className="cursor-default text-sm font-semibold"
-                    >
-                      {marker.vacancies} vagas disponíveis
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      type="button"
-                      className="cursor-default text-sm font-semibold"
-                    >
-                      {marker.occupation} vagas ocupadas
-                    </Button>
+                  <footer className="flex flex-col gap-2">
+                    <div className="flex justify-center gap-2">
+                      <Button
+                        variant="default"
+                        type="button"
+                        className="cursor-default text-sm font-semibold"
+                      >
+                        {marker.vacancies} vagas disponíveis
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        type="button"
+                        className="cursor-default text-sm font-semibold"
+                      >
+                        {marker.occupation} vagas ocupadas
+                      </Button>
+                    </div>
+                    {marker.updatedAt && (
+                      <span className="text-xs text-gray-400">
+                        Atualizado em: {formatDate(marker.updatedAt)}
+                      </span>
+                    )}
                   </footer>
                 </Popup>
               </Marker>
