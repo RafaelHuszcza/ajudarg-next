@@ -9,6 +9,14 @@ export async function PUT(
   { params }: { params: { id: string } },
 ) {
   const markerId = params.id
+  if (!markerId) {
+    return new NextResponse(
+      JSON.stringify({ error: 'Localização não encontrada' }),
+      {
+        status: 404,
+      },
+    )
+  }
   const marker = await request.json()
 
   const session = await getServerSessionWithAuth()
@@ -73,7 +81,11 @@ export async function PUT(
   type FormData = z.infer<typeof markerSchema>
 
   const markersValidate: FormData = markerSchema.parse(marker)
-
+  if (!markersValidate) {
+    return new NextResponse(JSON.stringify({ error: 'Dados inválidos' }), {
+      status: 400,
+    })
+  }
   await prisma.local.update({
     where: { id: marker.id },
     data: {
