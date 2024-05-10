@@ -14,6 +14,9 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet'
 
+import { Button } from './ui/button'
+import { LogosWhatsappIcon } from './wppIcon'
+
 type Markers = {
   lat: number
   lng: number
@@ -21,6 +24,12 @@ type Markers = {
   type: string
   needs: string[]
   address: string
+  WhatsApp?: string
+  meals?: number
+  phone?: string
+  hours?: string
+  vacancies: number
+  occupation: number
 }
 type Risks = {
   type: string
@@ -123,6 +132,10 @@ const Map = ({ markers, risks }: MapsProps) => {
           })}
         {markers.length > 0 &&
           markers.map((marker) => {
+            // const x = {
+            //   WhatsApp: '53992411640',
+            //   phone: '53992411640',
+            // }
             return (
               <Marker
                 icon={
@@ -141,23 +154,81 @@ const Map = ({ markers, risks }: MapsProps) => {
                 position={[marker.lat, marker.lng]}
               >
                 <Popup>
-                  <header className="text-center text-lg font-bold">
+                  <header className="relative text-center text-lg font-bold">
                     <h3>{marker.type}</h3>
+                    <h2 className="text-base font-semibold">{marker.name}</h2>
+                    <a
+                      target="_blank"
+                      href={`https://www.google.com/maps/dir//${marker.lat},${marker.lng}/@${marker.lat},${marker.lng},15z`}
+                      className="text-sm font-semibold"
+                    >
+                      {marker.address}
+                    </a>
                   </header>
-                  <a
-                    target="_blank"
-                    href={`https://www.google.com/maps/dir//${marker.lat},${marker.lng}/@${marker.lat},${marker.lng},15z`}
-                    className="font-semibold"
-                  >
-                    {marker.address}
-                  </a>
-                  <ul className="text-sm font-light">
-                    {marker.needs.length > 0 &&
-                      marker.needs.map((need, _) => <li key={_}>{need}</li>)}
-                  </ul>
-                  <p>{marker.name}</p>
-                  <footer>
-                    <p>{marker.address}</p>
+
+                  <main className="flex flex-col gap-1  py-2 text-sm">
+                    {marker.WhatsApp ||
+                      (marker.phone && (
+                        <span className="m-0 flex items-center gap-1 p-0 ">
+                          Contato:
+                          <span>{marker.phone}</span>
+                          {marker.WhatsApp && marker.phone && <span> e</span>}
+                          {marker.WhatsApp && (
+                            <Button
+                              variant="link"
+                              className="h-8 w-8 p-0"
+                              asChild
+                            >
+                              <a
+                                target="_blank"
+                                href={`https://api.whatsapp.com/send?phone=${marker.WhatsApp}`}
+                              >
+                                <LogosWhatsappIcon className="h-8 w-8"></LogosWhatsappIcon>
+                              </a>
+                            </Button>
+                          )}
+                        </span>
+                      ))}
+                    {marker.needs.length && (
+                      <>
+                        <span className="m-0 p-0 text-sm  ">Necessidades:</span>
+                        <ul className=" flex flex-wrap  text-sm font-light">
+                          {marker.needs.length > 0 &&
+                            marker.needs.map((need, index) => (
+                              <li className="text-sm" key={index}>
+                                {need}
+                                {marker.needs.length - 1 === index ? '' : ', '}
+                              </li>
+                            ))}
+                        </ul>
+                      </>
+                    )}
+                    {marker.meals && (
+                      <span className="m-0 p-0 text-sm ">
+                        Quantidade de Refeições que precisamos: {marker.meals}
+                      </span>
+                    )}
+                    {marker.hours && (
+                      <span className="m-0 p-0 text-sm ">
+                        Horário de funcionamento: marker.hours
+                      </span>
+                    )}
+                  </main>
+                  <footer className="flex justify-center gap-2">
+                    <Button
+                      variant="default"
+                      type="button"
+                      className="cursor-default text-sm font-semibold"
+                    >
+                      {marker.vacancies} vagas disponíveis
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      type="button"
+                      className="cursor-default text-sm font-semibold"
+                    >
+                      {marker.occupation} vagas ocupadas
+                    </Button>
                   </footer>
                 </Popup>
               </Marker>
