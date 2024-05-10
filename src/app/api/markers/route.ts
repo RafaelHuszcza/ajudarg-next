@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
-// import { z } from 'zod'
-// import { getServerSessionWithAuth } from '@/services/auth'
+import { z } from 'zod'
+import { getServerSessionWithAuth } from '@/services/auth'
 import { prisma } from '@/services/database'
 
 export async function GET() {
@@ -16,84 +16,171 @@ export async function GET() {
 
 // TODO - With credentials
 
-// export async function POST(request: Request) {
-//   const marker = await request.json()
+export async function POST(request: Request) {
+  const marker = await request.json()
 
-//   const session = await getServerSessionWithAuth()
-//   if (!session) {
-//     return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
-//       status: 401,
-//     })
-//   }
-//   const markerSchema = z.object({
-//     email: z
-//       .string({ required_error: 'Email é requerido' })
-//       .email('Email Inválido'),
-//     password: z
-//       .string({ required_error: 'Senha é requerida' })
-//       .min(1, 'Senha é requerida'),
-//   })
-//   type FormData = z.infer<typeof markerSchema>
+  const session = await getServerSessionWithAuth()
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
+  }
+  const markerSchema = z.object({
+    name: z
+      .string({ required_error: 'Nome é necessário' }),
+    lat: z
+      .number({ required_error: 'Latitude é necessária' }),
+    lng: z
+      .number({ required_error: 'Longitude é necessária' }), 
+    type: z
+      .string({ required_error: 'Tipo é necessário' }),
+    needs: z
+      .array(z.string({ required_error: 'Necessidades são necessárias'})).default([]),
+    address: z
+      .string({ required_error: 'Endereço é necessário' }),
+    hours: z
+      .string({ required_error: 'Horário é necessário' }),
+    WhatsApp: z
+      .string({ required_error: 'WhatsApp é necessário' })
+      .optional(),
+    phone: z
+      .string({ required_error: 'Telefone é necessário' })
+      .optional(),
+    meals: z
+      .number().int({ message: 'Refeições é necessário' })
+      .optional()
 
-//   const markersValidate: FormData = markerSchema.parse(marker)
+  })
+  type FormData = z.infer<typeof markerSchema>
 
-//   const { user } = session
-//   if (!user) {
-//     return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
-//       status: 401,
-//     })
-//   }
-//   if (!user.email)
-//     return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
-//       status: 401,
-//     })
+  const markersValidate: FormData = markerSchema.parse(marker)
 
-//   const userDB = await prisma.user.findFirst({
-//     where: { email: user.email },
-//     select: { id: true },
-//   })
+  const { user } = session
+  if (!user) {
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
+  }
+  if (!user.email)
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
 
-//   await prisma.local.create({
-//     data: {
-//       name: marker.name,
-//       lat: marker.lat,
-//       lng: marker.lng,
-//       type: marker.type,
-//       needs: marker.needs,
-//       address: marker.address,
-//       vacancies: 0,
-//       occupation: 0,
-//       responsibleUserId: admin.id,
-//       hours: marker.hours,
-//     },
-//   })
-// }
+  const userDB = await prisma.user.findFirst({
+    where: { email: user.email },
+    select: { id: true },
+  })
+
+  if (!userDB) {
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
+  }
+
+  await prisma.local.create({
+    data: {
+      name: marker.name,
+      lat: marker.lat,
+      lng: marker.lng,
+      type: marker.type,
+      needs: marker.needs,
+      address: marker.address,
+      vacancies: 0,
+      occupation: 0,
+      responsibleUserId: userDB.id,
+      hours: marker.hours,
+      WhatsApp: marker.WhatsApp,
+      phone: marker.phone,
+      meals: marker.meals
+    },
+  })
+
+  return NextResponse.json({ message: 'Localização criada com sucesso' })
+}
 
 // TODO - Only the responsible
-// export async function PUT() {
-//   const session = await getServerSessionWithAuth()
-//   if (!session) {
-//     return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
-//       status: 401,
-//     })
-//   }
+export async function PUT(request: Request) {
 
-//   await prisma.local.update({
-//     where: { id: marker.id },
-//     data: {
-//       name: marker.name,
-//       lat: marker.lat,
-//       lng: marker.lng,
-//       type: marker.type,
-//       needs: marker.needs,
-//       address: marker.address,
-//       vacancies: 0,
-//       occupation: 0,
-//       responsibleUserId: admin.id,
-//       hours: marker.hours,
-//     },
-//   })
-// }
+  const marker = await request.json()
+
+  const session = await getServerSessionWithAuth()
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
+  }
+
+  const { user } = session
+  if (!user) {
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
+  }
+  if (!user.email)
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
+
+  const userDB = await prisma.user.findFirst({
+    where: { email: user.email },
+    select: { id: true },
+  })
+
+  if (!userDB) {
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
+  }
+
+  const markerSchema = z.object({
+    name: z
+      .string({ required_error: 'Nome é necessário' }),
+    lat: z
+      .number({ required_error: 'Latitude é necessária' }),
+    lng: z
+      .number({ required_error: 'Longitude é necessária' }),
+    type: z
+      .string({ required_error: 'Tipo é necessário' }),
+    needs: z
+      .array(z.string({ required_error: 'Necessidades são necessárias'})).default([]),
+    address: z
+      .string({ required_error: 'Endereço é necessário' }),
+    hours: z
+      .string({ required_error: 'Horário é necessário' }),
+    WhatsApp: z
+      .string({ required_error: 'WhatsApp é necessário' })
+      .optional(),
+    phone: z
+      .string({ required_error: 'Telefone é necessário' })
+      .optional(),
+    meals: z
+      .number().int({ message: 'Refeições é necessário' })
+      .optional()
+  })
+  type FormData = z.infer<typeof markerSchema>
+
+  const markersValidate: FormData = markerSchema.parse(marker)
+
+  
+
+  await prisma.local.update({
+    where: { id: marker.id },
+    data: {
+      name: marker.name,
+      lat: marker.lat,
+      lng: marker.lng,
+      type: marker.type,
+      needs: marker.needs,
+      address: marker.address,
+      vacancies: 0,
+      occupation: 0,
+      responsibleUserId: userDB.id,
+      hours: marker.hours,
+    },
+  })
+
+  return NextResponse.json({ message: 'Localização atualizado com sucesso' })
+}
 
 // // just commented code
 // export async function POST() {
