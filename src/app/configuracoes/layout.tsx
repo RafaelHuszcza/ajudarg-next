@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Configurações do sistema',
 }
 
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     <div className="flex w-full flex-1 ">
       <MainSidebar />
-      <main className="flex-1 overflow-auto">{children}</main>
+      <main className="w-full flex-1">{children}</main>
     </div>
   )
 }

@@ -213,6 +213,40 @@ export async function GET(
       { status: 404 },
     )
   }
+  const responsibleUser = await prisma.user.findFirst({
+    where: { id: marker.responsibleUserId },
+    select: { email: true },
+  })
+  if (!responsibleUser) {
+    return new NextResponse(
+      JSON.stringify({ error: 'Usuário responsável não encontrado' }),
+      { status: 404 },
+    )
+  }
+  if (!responsibleUser.email) {
+    return new NextResponse(
+      JSON.stringify({ error: 'Usuário responsável não encontrado' }),
+      { status: 404 },
+    )
+  }
+  interface BFFmarker {
+    id: string
+    name: string
+    lat: number
+    lng: number
+    type: string
+    needs: string[]
+    address: string
+    vacancies: number
+    occupation: number
+    hours: string | null
+    WhatsApp: string | null
+    phone: string | null
+    meals: number | null
+    responsibleEmail: string
+  }
+  const email = responsibleUser.email
+  const data: BFFmarker = { ...marker, responsibleEmail: email }
 
-  return NextResponse.json(marker)
+  return NextResponse.json(data)
 }

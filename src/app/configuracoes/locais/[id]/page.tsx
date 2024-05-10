@@ -27,5 +27,9 @@ const getMarker = async (id: string) => {
 export default async function Page({ params }: { params: { id: string } }) {
   const { id } = params
   const defaultValues = await getMarker(id)
-  return <AddMarkerForm method="PUT" defaultValues={defaultValues} id={id} />
+  const newDefaultValues = {
+    ...defaultValues,
+    needs: defaultValues.needs.map((item: string) => ({ value: item })),
+  }
+  return <AddMarkerForm method="PUT" defaultValues={newDefaultValues} id={id} />
 }
