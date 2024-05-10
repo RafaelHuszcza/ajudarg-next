@@ -193,6 +193,28 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
+  const session = await getServerSessionWithAuth()
+  if (!session) {
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
+  }
+  const userEditing = session.user?.email
+  if (!userEditing) {
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
+  }
+  const userDB = await prisma.user.findFirst({
+    where: { email: userEditing },
+    select: { id: true },
+  })
+  if (!userDB) {
+    return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
+      status: 401,
+    })
+  }
+
   const markerId = params.id
   if (!markerId) {
     return new NextResponse(
@@ -217,6 +239,7 @@ export async function GET(
     where: { id: marker.responsibleUserId },
     select: { email: true },
   })
+
   if (!responsibleUser) {
     return new NextResponse(
       JSON.stringify({ error: 'Usuário responsável não encontrado' }),
@@ -229,6 +252,13 @@ export async function GET(
       { status: 404 },
     )
   }
+  if (userDB.id !== marker.responsibleUserId) {
+    return new NextResponse(
+      JSON.stringify({ error: 'Usuário não autorizado' }),
+      { status: 401 },
+    )
+  }
+
   interface BFFmarker {
     id: string
     name: string
