@@ -73,10 +73,11 @@ export async function PUT(
       .array(z.string({ required_error: 'Necessidades são necessárias' }))
       .default([]),
     address: z.string({ required_error: 'Endereço é necessário' }),
-    hours: z.string({ required_error: 'Horário é necessário' }),
+    hours: z.string({ required_error: 'Horário é necessário' }).optional(),
     WhatsApp: z.string({ required_error: 'WhatsApp é necessário' }).optional(),
     phone: z.string({ required_error: 'Telefone é necessário' }).optional(),
     meals: z.number().int({ message: 'Refeições é necessário' }).optional(),
+    responsibleEmail: z.string({ required_error: 'Email é necessário' }).optional(),
   })
   type FormData = z.infer<typeof markerSchema>
 
@@ -86,6 +87,21 @@ export async function PUT(
       status: 400,
     })
   }
+
+  if (markersValidate.responsibleEmail) {
+    const responsibleUser = await prisma.user.findFirst({
+      where: { email: markersValidate.responsibleEmail },
+      select: { id: true },
+    })
+    if (!responsibleUser) {
+      return new NextResponse(
+        JSON.stringify({ error: 'Usuário responsável não encontrado' }),
+        { status: 404 },
+      )
+    }
+    marker.responsibleUserId = responsibleUser.id
+  }
+
   await prisma.local.update({
     where: { id: markerId },
     data: {
@@ -98,6 +114,7 @@ export async function PUT(
       vacancies: marker.vacancies,
       occupation: marker.occupation,
       hours: marker.hours,
+      responsibleUserId: marker.responsibleUserId
     },
   })
 
@@ -167,4 +184,32 @@ export async function DELETE(request: NextRequest,
   })
 
   return NextResponse.json({ message: 'Localização deletado com sucesso' }) 
+}
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  const markerId = params.id
+  if (!markerId) {
+    return new NextResponse(
+      JSON.stringify({ error: 'Localização não encontrada' }),
+      {
+        status: 404,
+      },
+    )
+  }
+
+  const marker = await prisma.local.findFirst({
+    where: { id: markerId },
+  })
+
+  if (!marker) {
+    return new NextResponse(
+      JSON.stringify({ error: 'Localização não encontrada' }),
+      { status: 404 },
+    )
+  }
+
+  return NextResponse.json(marker)
 }
