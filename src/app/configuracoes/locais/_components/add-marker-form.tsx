@@ -26,6 +26,8 @@ interface FormMarkers {
     WhatsApp?: string
     phone?: string
     meals?: number
+    vacancies: number
+    occupation: number
     responsibleEmail: string
   }
 }
@@ -52,6 +54,10 @@ const formSchema = z.object({
   responsibleEmail: z
     .string({ required_error: 'Email é necessário' })
     .optional(),
+  vacancies: z.coerce.number({ required_error: 'Vagas é necessário' }),
+  occupation: z.coerce.number({
+    required_error: 'Vagas ocupadas é necessário',
+  }),
 })
 
 export type FormData = z.infer<typeof formSchema>
@@ -72,6 +78,8 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
       phone: defaultValues?.phone ?? '',
       meals: defaultValues?.meals ?? 0,
       responsibleEmail: defaultValues?.responsibleEmail ?? '',
+      vacancies: defaultValues?.vacancies ?? 0,
+      occupation: defaultValues?.occupation ?? 0,
     },
   })
 
@@ -111,7 +119,7 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
     <Card className="mx-auto my-12  h-auto   w-full max-w-[90%]   border-2 border-primary">
       <CardHeader className="space-y-1">
         <CardTitle className="text-center text-2xl font-bold">
-          Criar Localização
+          {method === 'POST' ? 'Cadastrar Local' : 'Editar Local'}
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col  items-center">
@@ -272,6 +280,35 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
               name="meals"
             />
           </div>
+          <div className="relative  min-w-[277px] space-y-2">
+            <Label htmlFor="vacancies">Vagas Disponíveis</Label>
+            <Input
+              type="number"
+              id="vacancies"
+              placeholder="Insira as vagas disponíveis no local"
+              {...register('vacancies')}
+            />
+            <ErrorMessage
+              className="absolute bottom-[-22px] m-0 p-0"
+              errors={errors}
+              name="vacancies"
+            />
+          </div>
+          <div className="relative  min-w-[277px] space-y-2">
+            <Label htmlFor="occupation">Vagas Ocupadas</Label>
+            <Input
+              type="number"
+              id="occupation"
+              placeholder="Insira as vagas ocupadas no local"
+              {...register('occupation')}
+            />
+            <ErrorMessage
+              className="absolute bottom-[-22px] m-0 p-0"
+              errors={errors}
+              name="vacancies"
+            />
+          </div>
+
           <div className="relative  min-w-[277px] space-y-2">
             <Label htmlFor="responsibleEmail">Email do responsável:</Label>
             <Input

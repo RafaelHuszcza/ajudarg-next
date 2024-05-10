@@ -121,7 +121,7 @@ const Map = ({ markers, risks }: MapsProps) => {
                 coord[1],
                 coord[0],
               ])
-              console.log(area.properties.fill)
+
               return (
                 <Polygon
                   weight={2}
@@ -180,29 +180,28 @@ const Map = ({ markers, risks }: MapsProps) => {
                   </header>
 
                   <main className="flex flex-col gap-1  py-2 text-sm">
-                    {marker.WhatsApp ||
-                      (marker.phone && (
-                        <span className="m-0 flex items-center gap-1 p-0 ">
-                          Contato:
-                          <span>{marker.phone}</span>
-                          {marker.WhatsApp && marker.phone && <span> e</span>}
-                          {marker.WhatsApp && (
-                            <Button
-                              variant="link"
-                              className="h-8 w-8 p-0"
-                              asChild
+                    {(marker.WhatsApp || marker.phone) && (
+                      <span className="m-0 flex items-center gap-1 p-0 ">
+                        Contato:
+                        <span>{marker.phone}</span>
+                        {marker.WhatsApp && marker.phone && <span> e</span>}
+                        {marker.WhatsApp && (
+                          <Button
+                            variant="link"
+                            className="h-8 w-8 p-0"
+                            asChild
+                          >
+                            <a
+                              target="_blank"
+                              href={`https://api.whatsapp.com/send?phone=${marker.WhatsApp}`}
                             >
-                              <a
-                                target="_blank"
-                                href={`https://api.whatsapp.com/send?phone=${marker.WhatsApp}`}
-                              >
-                                <LogosWhatsappIcon className="h-8 w-8"></LogosWhatsappIcon>
-                              </a>
-                            </Button>
-                          )}
-                        </span>
-                      ))}
-                    {marker.needs.length && (
+                              <LogosWhatsappIcon className="h-8 w-8"></LogosWhatsappIcon>
+                            </a>
+                          </Button>
+                        )}
+                      </span>
+                    )}
+                    {marker.needs.length > 0 && (
                       <>
                         <span className="m-0 p-0 text-sm  ">Necessidades:</span>
                         <ul className=" flex flex-wrap  text-sm font-light">
@@ -216,7 +215,7 @@ const Map = ({ markers, risks }: MapsProps) => {
                         </ul>
                       </>
                     )}
-                    {marker.meals && (
+                    {marker.meals && marker.meals > 0 && (
                       <span className="m-0 p-0 text-sm ">
                         Quantidade de Refeições que precisamos: {marker.meals}
                       </span>

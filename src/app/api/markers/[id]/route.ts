@@ -80,6 +80,8 @@ export async function PUT(
     responsibleEmail: z
       .string({ required_error: 'Email é necessário' })
       .optional(),
+    vacancies: z.number({ required_error: 'Vagas é necessário' }),
+    occupation: z.number({ required_error: 'Ocupação é necessário' }),
   })
   type FormData = z.infer<typeof markerSchema>
 
@@ -116,6 +118,9 @@ export async function PUT(
       vacancies: marker.vacancies,
       occupation: marker.occupation,
       hours: marker.hours,
+      WhatsApp: marker.WhatsApp,
+      phone: marker.phone,
+      meals: marker.meals,
       responsibleUserId: marker.responsibleUserId,
     },
   })

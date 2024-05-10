@@ -6,8 +6,8 @@ services:
     image: postgres
     ports:
       - 5432:5432
-    env_file:
-      - .env.local
+    # env_file:
+    #   - .env.local
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -24,3 +24,5 @@ services:
       - NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}
       - NODE=${NODE}
       - DATABASE_URL=${DATABASE_URL}
+
+      

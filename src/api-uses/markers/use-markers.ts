@@ -6,7 +6,7 @@ import { markerQueryKeys } from './marker-query-keys'
 
 export function useMarkers() {
   const getMarkersFn = async () => {
-    const response = await apiClient.get(markersRoute)
+    const response = await apiClient.get(`${markersRoute}/list`)
     return response.data
   }
   return useQuery({
