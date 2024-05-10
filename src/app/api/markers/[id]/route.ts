@@ -73,7 +73,7 @@ export async function PUT(
       .array(z.string({ required_error: 'Necessidades são necessárias' }))
       .default([]),
     address: z.string({ required_error: 'Endereço é necessário' }),
-    hours: z.string({ required_error: 'Horário é necessário' }),
+    hours: z.string({ required_error: 'Horário é necessário' }).optional(),
     WhatsApp: z.string({ required_error: 'WhatsApp é necessário' }).optional(),
     phone: z.string({ required_error: 'Telefone é necessário' }).optional(),
     meals: z.number().int({ message: 'Refeições é necessário' }).optional(),
