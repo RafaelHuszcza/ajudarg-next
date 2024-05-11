@@ -48,7 +48,11 @@ const DynamicMap = dynamic(() => import('../components/maps'), {
 })
 
 export default async function Page() {
-  const [markers, riskAreas, impactZones] = await Promise.all([getMarkers(), getRiskAreas(), getImpactZones()])
+  const [markers, riskAreas, impactZones] = await Promise.all([
+    getMarkers(),
+    getRiskAreas(),
+    getImpactZones(),
+  ])
 
   return (
     <main className="h-[calc(100vh-5rem)] w-full">

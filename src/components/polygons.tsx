@@ -1,7 +1,6 @@
-import * as React from 'react'
-
-import { LayerGroup, LayersControl, Popup, Polygon } from 'react-leaflet'
 import { LatLngExpression } from 'leaflet'
+import * as React from 'react'
+import { LayerGroup, LayersControl, Polygon, Popup } from 'react-leaflet'
 
 type Risks = {
   type: string
@@ -37,61 +36,19 @@ interface PolygonsProps {
   zones: Zones[]
 }
 
-export function Polygons({
-  risks,
-  zones
-}: PolygonsProps) {
-  const [impactZonesShown, setImpactZonesShown] = React.useState(false);
+export function Polygons({ risks, zones }: PolygonsProps) {
+  const [impactZonesShown, setImpactZonesShown] = React.useState(false)
   return (
     <>
       <LayersControl position="topright" collapsed={false}>
         <LayersControl.Overlay name="Zonas de risco" checked>
           <LayerGroup>
-          {risks.length > 0 &&
-            risks.map((area, index: number) => {
-              if (area.geometry.type === 'Polygon') {
-                const positions = area.geometry.coordinates[0].map((coord) => [
-                  coord[1],
-                  coord[0],
-                ])
-
-                return (
-                  <Polygon
-                    weight={2}
-                    fillColor={area.properties.fill}
-                    fillOpacity={area.properties['fill-opacity'] * 0.5}
-                    opacity={area.properties['stroke-opacity'] * 0.5}
-                    color={area.properties.stroke}
-                    stroke={true}
-                    positions={positions as LatLngExpression[]}
-                    key={index}
-                  >
-                    <Popup>
-                      <h3
-                        dangerouslySetInnerHTML={{ __html: area.properties.desc }}
-                      />
-                    </Popup>
-                  </Polygon>
-                )
-              }
-              return null
-            })}
-          </LayerGroup>
-        </LayersControl.Overlay>
-
-        <LayersControl.Overlay name="Zonas de impacto">
-          <LayerGroup
-          eventHandlers={{
-            add: (_) => setImpactZonesShown(true),
-            remove: (_) => setImpactZonesShown(false)
-          }}>
-            {zones.length > 0 && true &&
-              zones.map((area, index: number) => {
+            {risks.length > 0 &&
+              risks.map((area, index: number) => {
                 if (area.geometry.type === 'Polygon') {
-                  const positions = area.geometry.coordinates[0].map((coord) => [
-                    coord[1],
-                    coord[0],
-                  ])
+                  const positions = area.geometry.coordinates[0].map(
+                    (coord) => [coord[1], coord[0]],
+                  )
 
                   return (
                     <Polygon
@@ -106,7 +63,9 @@ export function Polygons({
                     >
                       <Popup>
                         <h3
-                          dangerouslySetInnerHTML={{ __html: area.properties.desc }}
+                          dangerouslySetInnerHTML={{
+                            __html: area.properties.desc,
+                          }}
                         />
                       </Popup>
                     </Polygon>
@@ -115,14 +74,60 @@ export function Polygons({
                 return null
               })}
           </LayerGroup>
-        </LayersControl.Overlay>     
+        </LayersControl.Overlay>
+
+        <LayersControl.Overlay name="Zonas de impacto">
+          <LayerGroup
+            eventHandlers={{
+              add: () => setImpactZonesShown(true),
+              remove: () => setImpactZonesShown(false),
+            }}
+          >
+            {zones.length > 0 &&
+              true &&
+              zones.map((area, index: number) => {
+                if (area.geometry.type === 'Polygon') {
+                  const positions = area.geometry.coordinates[0].map(
+                    (coord) => [coord[1], coord[0]],
+                  )
+
+                  return (
+                    <Polygon
+                      weight={2}
+                      fillColor={area.properties.fill}
+                      fillOpacity={area.properties['fill-opacity'] * 0.5}
+                      opacity={area.properties['stroke-opacity'] * 0.5}
+                      color={area.properties.stroke}
+                      stroke={true}
+                      positions={positions as LatLngExpression[]}
+                      key={index}
+                    >
+                      <Popup>
+                        <h3
+                          dangerouslySetInnerHTML={{
+                            __html: area.properties.desc,
+                          }}
+                        />
+                      </Popup>
+                    </Polygon>
+                  )
+                }
+                return null
+              })}
+          </LayerGroup>
+        </LayersControl.Overlay>
       </LayersControl>
-  
-      { impactZonesShown &&
-        <div className='absolute z-[999] bottom-20 sm:bottom-0 right-[-20px] w-56 m-10'>
-          <img src="/zones-legend.jpg" alt="azul é zona leve, amarelo é zona severa e vermelho é zona extrema" className='rounded-lg' />
+
+      {impactZonesShown && (
+        <div className="absolute bottom-20 right-[-20px] z-[999] m-10 w-56 sm:bottom-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/zones-legend.jpg"
+            alt="azul é zona leve, amarelo é zona severa e vermelho é zona extrema"
+            className="rounded-lg"
+          />
         </div>
-      }
+      )}
     </>
   )
 }
