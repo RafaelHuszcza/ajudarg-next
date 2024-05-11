@@ -114,6 +114,38 @@ const Map = ({ markers, risks }: MapsProps) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
+    <div id="legend" className="absolute bottom-0 right-0 z-[999] m-10 mb-50 bg-background text-foreground rounded-lg p-3 shadow-md">
+      <ul>
+        <li className="font-semibold flex items-center pb-1">
+          <img src={BlueIcon.options.iconUrl} alt="Blue Icon" className="w-3 h-4 mr-2"/>
+          Arrecadação
+        </li>
+        <li className="font-semibold flex items-center pb-1">
+        <img src={GoldIcon.options.iconUrl} alt="Gold Icon" className="w-3 h-4 mr-2"/>
+          Abrigo
+        </li>
+        <li className="font-semibold flex items-center pb-1">
+        <img src={RedIcon.options.iconUrl} alt="Red Icon" className="w-3 h-4 mr-2"/>
+          Ponto de voluntarização
+        </li>
+        <li className="font-semibold flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 24 24"
+            className="w-4 h-5 mr-1"
+          >
+            <path
+              fill="#ff7575"
+              d="M20 2H4c-1.1 0-2 .9-2 2v16a2 2 0 0 0 2 2h16c1.11 0 2-.89 2-2V4a2 2 0 0 0-2-2M4 6l2-2h4.9L4 10.9zm0 7.7L13.7 4h4.9L4 18.6zM20 18l-2 2h-4.9l6.9-6.9zm0-7.7L10.3 20H5.4L20 5.4z"
+            />
+          </svg>
+          Área de Risco
+        </li>
+      </ul>
+    </div>
+
         {risks.length > 0 &&
           risks.map((area, index: number) => {
             if (area.geometry.type === 'Polygon') {
