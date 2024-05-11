@@ -16,7 +16,7 @@ export const MarkersLegends = ({
   return (
     <div
       id="legend"
-      className="mb-50 absolute bottom-24 right-0 z-[999] m-10 rounded-lg bg-background p-3 text-foreground shadow-md"
+      className="mb-50 absolute bottom-0 right-0 z-[999] m-10 rounded-lg bg-background p-3 text-foreground shadow-md"
     >
       <ul>
         <li className="flex items-center pb-1 font-semibold">

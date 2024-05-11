@@ -4,8 +4,6 @@ import { NextResponse } from 'next/server'
 
 import { prisma } from '@/services/database'
 
-// import { prisma } from '@/services/database'
-
 export async function GET() {
   try {
     const phones = await prisma.phone.findMany()
@@ -14,6 +12,27 @@ export async function GET() {
     console.log({ e })
     return NextResponse.json({ message: 'Erro no servidor' }, { status: 500 })
   }
+}
+
+export async function POST(request: Request) {
+  try {
+    const { name, number, href } = await request.json()
+    await prisma.phone.create({
+      data: {
+        name,
+        href,
+        number,
+      },
+    })
+    return NextResponse.json({ message: 'Grupo criado com sucesso' })
+  } catch (e) {
+    console.log({ e })
+    return NextResponse.json({ message: 'Erro no servidor' }, { status: 500 })
+  }
+}
+export async function PUT() {
+  revalidateTag('phones')
+  return NextResponse.json({ message: 'Grupo atualizado com sucesso' })
 }
 
 // export async function POST() {
@@ -70,7 +89,3 @@ export async function GET() {
 //   )
 //   return NextResponse.json({ message: 'Grupos criados com sucesso' })
 // }
-export async function PUT() {
-  revalidateTag('phones')
-  return NextResponse.json({ message: 'Grupo atualizado com sucesso' })
-}

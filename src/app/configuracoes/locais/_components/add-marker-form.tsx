@@ -29,6 +29,7 @@ interface FormMarkers {
     vacancies: number
     occupation: number
     responsibleEmail: string
+    newNeeds: { name: string; amount: number }[]
   }
 }
 const formSchema = z.object({
@@ -58,6 +59,9 @@ const formSchema = z.object({
   occupation: z.coerce.number({
     required_error: 'Vagas ocupadas é necessário',
   }),
+  newNeeds: z
+    .array(z.object({ name: z.string(), amount: z.coerce.number().default(0) }))
+    .default([]),
 })
 
 export type FormData = z.infer<typeof formSchema>
@@ -80,6 +84,11 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
       responsibleEmail: defaultValues?.responsibleEmail ?? '',
       vacancies: defaultValues?.vacancies ?? 0,
       occupation: defaultValues?.occupation ?? 0,
+      newNeeds: defaultValues?.newNeeds
+        ? defaultValues?.newNeeds.length > 0
+          ? defaultValues?.newNeeds
+          : [{ name: '', amount: 0 }]
+        : [{ name: '', amount: 0 }],
     },
   })
 
@@ -91,10 +100,11 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: 'needs',
+    name: 'newNeeds',
   })
+
   const addNewNeed = () => {
-    append({ value: '' })
+    append({ name: '', amount: 0 })
   }
   const createMarker = useCreateMarker()
   const editMarker = useEditMarker()
@@ -186,21 +196,29 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
           </div>
 
           {fields.map((field, index) => (
-            <div className="min-w-[277px] space-y-2" key={index}>
-              <Label htmlFor={`needs-${index}`}>Necessidades</Label>
+            <div className="max-w-[277px] space-y-2" key={index}>
+              <Label htmlFor={`newNeeds-${index}`}>Necessidades</Label>
               <div className="flex w-full gap-2">
-                <div className="w-full">
+                <div className="w-full min-w-0">
                   <Input
-                    id={`needs-${index}`}
+                    className="w-full"
+                    id={`newNeeds-${index}`}
                     placeholder="Insira uma necessidade do local"
-                    {...register(`needs.${index}.value`)}
+                    {...register(`newNeeds.${index}.name`)}
                   />
                   <ErrorMessage
                     className="absolute bottom-[-22px] m-0 p-0"
                     errors={errors}
-                    name="needs"
+                    name="newNeeds"
                   />
                 </div>
+                <Input
+                  className="w-20 min-w-0"
+                  type="number"
+                  id={`newNeeds-${index}`}
+                  placeholder="Quantidade"
+                  {...register(`newNeeds.${index}.amount`)}
+                />
                 <Button
                   type="button"
                   onClick={
@@ -266,20 +284,7 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
               name="phone"
             />
           </div>
-          <div className="relative  min-w-[277px] space-y-2">
-            <Label htmlFor="meals">Refeições:</Label>
-            <Input
-              type="number"
-              id="meals"
-              placeholder="Insira a quantidade de refeições do local"
-              {...register('meals')}
-            />
-            <ErrorMessage
-              className="absolute bottom-[-22px] m-0 p-0"
-              errors={errors}
-              name="meals"
-            />
-          </div>
+
           <div className="relative  min-w-[277px] space-y-2">
             <Label htmlFor="vacancies">Vagas Disponíveis</Label>
             <Input
@@ -306,20 +311,6 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
               className="absolute bottom-[-22px] m-0 p-0"
               errors={errors}
               name="vacancies"
-            />
-          </div>
-
-          <div className="relative  min-w-[277px] space-y-2">
-            <Label htmlFor="responsibleEmail">Email do responsável:</Label>
-            <Input
-              id="responsibleEmail"
-              placeholder="Insira o email do responsável"
-              {...register('responsibleEmail')}
-            />
-            <ErrorMessage
-              className="absolute bottom-[-22px] m-0 p-0"
-              errors={errors}
-              name="responsibleEmail"
             />
           </div>
         </form>

@@ -82,6 +82,9 @@ export async function PUT(
       .optional(),
     vacancies: z.number({ required_error: 'Vagas é necessário' }),
     occupation: z.number({ required_error: 'Ocupação é necessário' }),
+    newNeeds: z
+      .array(z.object({ name: z.string(), amount: z.number() }))
+      .optional(),
   })
   type FormData = z.infer<typeof markerSchema>
 
@@ -106,7 +109,7 @@ export async function PUT(
     marker.responsibleUserId = responsibleUser.id
   }
 
-  await prisma.local.update({
+  const locale = await prisma.local.update({
     where: { id: markerId },
     data: {
       name: marker.name,
@@ -123,7 +126,29 @@ export async function PUT(
       meals: marker.meals,
       responsibleUserId: marker.responsibleUserId,
     },
+    include: { newNeeds: true },
   })
+
+  if (locale.newNeeds) {
+    for (const need of locale.newNeeds) {
+      await prisma.newNeed.delete({
+        where: { id: need.id },
+      })
+    }
+  }
+  for (const newNeedData of marker.newNeeds) {
+    if (newNeedData.name) {
+      await prisma.newNeed.create({
+        data: {
+          name: newNeedData.name,
+          amount: newNeedData.amount.toString(),
+          local: {
+            connect: { id: locale.id },
+          },
+        },
+      })
+    }
+  }
 
   return NextResponse.json({ message: 'Localização atualizado com sucesso' })
 }
@@ -232,6 +257,7 @@ export async function GET(
 
   const marker = await prisma.local.findFirst({
     where: { id: markerId },
+    include: { newNeeds: true },
   })
 
   if (!marker) {

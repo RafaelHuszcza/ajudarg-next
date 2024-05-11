@@ -6,7 +6,11 @@ import { prisma } from '@/services/database'
 
 export async function GET() {
   try {
-    const markers = await prisma.local.findMany()
+    const markers = await prisma.local.findMany({
+      include: {
+        newNeeds: true,
+      },
+    })
     return NextResponse.json(markers)
   } catch (e) {
     console.log({ e })
@@ -40,6 +44,9 @@ export async function POST(request: Request) {
     meals: z.number().int({ message: 'Refeições é necessário' }).optional(),
     vacancies: z.number({ required_error: 'Vagas é necessário' }),
     occupation: z.number({ required_error: 'Ocupação é necessário' }),
+    newNeeds: z
+      .array(z.object({ name: z.string(), amount: z.number() }))
+      .optional(),
   })
   type FormData = z.infer<typeof markerSchema>
 
@@ -71,7 +78,7 @@ export async function POST(request: Request) {
     })
   }
 
-  await prisma.local.create({
+  const newLocale = await prisma.local.create({
     data: {
       name: marker.name,
       lat: marker.lat,
@@ -89,8 +96,63 @@ export async function POST(request: Request) {
     },
   })
 
+  for (const newNeedData of marker.newNeeds) {
+    await prisma.newNeed.create({
+      data: {
+        name: newNeedData.name,
+        amount: newNeedData.amount.toString(),
+        local: {
+          connect: { id: newLocale.id },
+        },
+      },
+    })
+  }
   return NextResponse.json({ message: 'Localização criada com sucesso' })
 }
+
+export async function PUT() {
+  const locales = await prisma.local.findMany({
+    include: { newNeeds: true },
+  })
+  for (const locale of locales) {
+    if (locale.newNeeds) {
+      for (const need of locale.newNeeds) {
+        if (need.name === '') {
+          await prisma.newNeed.delete({
+            where: { id: need.id },
+          })
+        }
+      }
+    }
+  }
+}
+
+// export async function PUT() {
+//   const locales = await prisma.local.findMany({
+//     include: { newNeeds: true },
+//   })
+//   for (const locale of locales) {
+//     if (locale.newNeeds) {
+//       for (const need of locale.newNeeds) {
+//         await prisma.newNeed.delete({
+//           where: { id: need.id },
+//         })
+//       }
+//     }
+//     for (const need of locale.needs) {
+//       await prisma.newNeed.create({
+//         data: {
+//           name: need,
+//           amount: '15',
+//           local: {
+//             connect: { id: locale.id },
+//           },
+//         },
+//       })
+//     }
+//     await new Promise((resolve) => setTimeout(resolve, 100))
+//   }
+// }
 
 // just commented code
 // export async function POST() {
