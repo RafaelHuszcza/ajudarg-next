@@ -31,18 +31,36 @@ type Zones = {
   }
 }
 
+type ZonesVisible = {
+  risk: boolean
+  impact: boolean
+}
+
 interface PolygonsProps {
   risks: Risks[]
   zones: Zones[]
+  setZonesVisible: React.Dispatch<React.SetStateAction<ZonesVisible>>
 }
 
-export function Polygons({ risks, zones }: PolygonsProps) {
-  const [impactZonesShown, setImpactZonesShown] = React.useState(false)
+export function ZonesPolygons({
+  risks,
+  zones,
+  setZonesVisible,
+}: PolygonsProps) {
+  const handleSetVisible = (isVisible: boolean, field: 'risk' | 'impact') => {
+    setZonesVisible((state) => ({ ...state, [field]: isVisible }))
+  }
+
   return (
     <>
       <LayersControl position="topright" collapsed={false}>
         <LayersControl.Overlay name="Zonas de risco" checked>
-          <LayerGroup>
+          <LayerGroup
+            eventHandlers={{
+              add: () => handleSetVisible(true, 'risk'),
+              remove: () => handleSetVisible(false, 'risk'),
+            }}
+          >
             {risks.length > 0 &&
               risks.map((area, index: number) => {
                 if (area.geometry.type === 'Polygon') {
@@ -79,8 +97,8 @@ export function Polygons({ risks, zones }: PolygonsProps) {
         <LayersControl.Overlay name="Zonas de impacto">
           <LayerGroup
             eventHandlers={{
-              add: () => setImpactZonesShown(true),
-              remove: () => setImpactZonesShown(false),
+              add: () => handleSetVisible(true, 'impact'),
+              remove: () => handleSetVisible(false, 'impact'),
             }}
           >
             {zones.length > 0 &&
@@ -95,8 +113,8 @@ export function Polygons({ risks, zones }: PolygonsProps) {
                     <Polygon
                       weight={2}
                       fillColor={area.properties.fill}
-                      fillOpacity={area.properties['fill-opacity'] * 0.5}
-                      opacity={area.properties['stroke-opacity'] * 0.5}
+                      fillOpacity={area.properties['fill-opacity'] * 0.7}
+                      opacity={area.properties['stroke-opacity'] * 0.7}
                       color={area.properties.stroke}
                       stroke={true}
                       positions={positions as LatLngExpression[]}
@@ -117,17 +135,6 @@ export function Polygons({ risks, zones }: PolygonsProps) {
           </LayerGroup>
         </LayersControl.Overlay>
       </LayersControl>
-
-      {impactZonesShown && (
-        <div className="absolute bottom-20 right-[-20px] z-[999] m-10 w-56 sm:bottom-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/zones-legend.jpg"
-            alt="azul é zona leve, amarelo é zona severa e vermelho é zona extrema"
-            className="rounded-lg"
-          />
-        </div>
-      )}
     </>
   )
 }
