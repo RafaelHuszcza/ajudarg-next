@@ -15,9 +15,9 @@ import {
 } from '@/components/ui/sheet'
 
 import { MarkersLegends } from './markers-legends'
-import { Polygons } from './polygons'
 import { Button } from './ui/button'
 import { LogosWhatsappIcon } from './wppIcon'
+import { ZonesPolygons } from './zones-polygons'
 
 type Markers = {
   lat: number
@@ -61,6 +61,11 @@ type Zones = {
     type: string
     coordinates: number[][][]
   }
+}
+
+type ZonesVisible = {
+  risk: boolean
+  impact: boolean
 }
 
 interface MapsProps {
@@ -110,6 +115,10 @@ const Map = ({ markers, risks, zones }: MapsProps) => {
   const GoldIcon = getIcon('gold')
   const RedIcon = getIcon('red')
   const [marketOpen, setMarkerOpen] = useState<Markers | null>(null)
+  const [zonesVisible, setZonesVisible] = useState<ZonesVisible>({
+    risk: true,
+    impact: false,
+  })
   const closeMarket = () => {
     setMarkerOpen(null)
   }
@@ -142,8 +151,15 @@ const Map = ({ markers, risks, zones }: MapsProps) => {
           blueIcon={BlueIcon}
           redIcon={RedIcon}
           goldIcon={GoldIcon}
+          renderRisks={zonesVisible.risk}
+          renderZones={zonesVisible.impact}
         />
-        <Polygons risks={risks} zones={zones} />
+
+        <ZonesPolygons
+          risks={risks}
+          zones={zones}
+          setZonesVisible={setZonesVisible}
+        />
 
         {markers.length > 0 &&
           markers.map((marker) => {
