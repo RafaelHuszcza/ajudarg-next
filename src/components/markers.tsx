@@ -122,7 +122,7 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
                       </a>
                     </Button>
                   )}
-                  {marker.responsibleWpp && (
+                  {marker.WhatsApp && (
                     <Button
                       variant="default"
                       className=" flex gap-2 bg-green-500 text-background hover:bg-green-600 dark:text-foreground"
