@@ -33,7 +33,7 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
     }
     return redIcon
   }
-  const x = { responsibleWpp: '53992411640' }
+
   return (
     <>
       {markers.length > 0 &&
@@ -122,7 +122,7 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
                       </a>
                     </Button>
                   )}
-                  {x.responsibleWpp && (
+                  {marker.responsibleWpp && (
                     <Button
                       variant="default"
                       className=" flex gap-2 bg-green-500 text-background hover:bg-green-600 dark:text-foreground"
