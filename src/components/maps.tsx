@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css'
 
 import L, { LatLngExpression } from 'leaflet'
 import { useEffect, useState } from 'react'
-import { MapContainer, Marker, Polygon, Popup, TileLayer } from 'react-leaflet'
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 
 import {
   Sheet,
@@ -14,8 +14,9 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet'
 
-import { Button } from './ui/button'
+import { MarkersLegends } from './markers-legends'
 import { Polygons } from './polygons'
+import { Button } from './ui/button'
 import { LogosWhatsappIcon } from './wppIcon'
 
 type Markers = {
@@ -112,7 +113,15 @@ const Map = ({ markers, risks, zones }: MapsProps) => {
   const closeMarket = () => {
     setMarkerOpen(null)
   }
-  console.log(markers)
+  const verifyMarkerType = (type: string) => {
+    if (type.toLowerCase().includes('abrigo')) {
+      return GoldIcon
+    }
+    if (type.toLowerCase().includes('arrecadação')) {
+      return BlueIcon
+    }
+    return RedIcon
+  }
   return (
     <>
       <Sheet open={!!marketOpen} onOpenChange={closeMarket}>
@@ -129,29 +138,18 @@ const Map = ({ markers, risks, zones }: MapsProps) => {
           maxZoom={19}
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <MarkersLegends
+          blueIcon={BlueIcon}
+          redIcon={RedIcon}
+          goldIcon={GoldIcon}
+        />
+        <Polygons risks={risks} zones={zones} />
 
-        <Polygons risks={risks} zones={zones}/>
-        
         {markers.length > 0 &&
           markers.map((marker) => {
-            // const x = {
-            //   WhatsApp: '53992411640',
-            //   phone: '53992411640',
-            // }
             return (
               <Marker
-                icon={
-                  marker.type === 'Ponto de voluntarização'
-                    ? RedIcon
-                    : marker.type === 'Abrigo'
-                      ? GoldIcon
-                      : BlueIcon
-                }
-                // eventHandlers={{
-                //   click: () => {
-                //     setMarkerOpen(marker)
-                //   },
-                // }}
+                icon={verifyMarkerType(marker.type)}
                 key={marker.name}
                 position={[marker.lat, marker.lng]}
               >
