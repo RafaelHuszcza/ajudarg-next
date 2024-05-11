@@ -131,6 +131,7 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
                       <a
                         target="_blank"
                         href={`https://api.whatsapp.com/send?phone=${marker.WhatsApp}`}
+                        className="text-background dark:text-foreground"
                       >
                         Contato WhatsApp
                         <LogosWhatsappIcon className="h-6 w-6"></LogosWhatsappIcon>
