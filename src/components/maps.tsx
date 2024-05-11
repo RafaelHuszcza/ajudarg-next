@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/sheet'
 
 import { Button } from './ui/button'
+import { Polygons } from './polygons'
 import { LogosWhatsappIcon } from './wppIcon'
 
 type Markers = {
@@ -46,13 +47,28 @@ type Risks = {
     coordinates: number[][][]
   }
 }
+type Zones = {
+  type: string
+  properties: {
+    desc: string
+    fill: string
+    'fill-opacity': number
+    stroke: string
+    'stroke-opacity': number
+  }
+  geometry: {
+    type: string
+    coordinates: number[][][]
+  }
+}
 
 interface MapsProps {
   markers: Markers[]
   risks: Risks[]
+  zones: Zones[]
 }
 
-const Map = ({ markers, risks }: MapsProps) => {
+const Map = ({ markers, risks, zones }: MapsProps) => {
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -114,35 +130,8 @@ const Map = ({ markers, risks }: MapsProps) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {risks.length > 0 &&
-          risks.map((area, index: number) => {
-            if (area.geometry.type === 'Polygon') {
-              const positions = area.geometry.coordinates[0].map((coord) => [
-                coord[1],
-                coord[0],
-              ])
-
-              return (
-                <Polygon
-                  weight={2}
-                  fillColor={area.properties.fill}
-                  fillOpacity={area.properties['fill-opacity'] * 0.5}
-                  opacity={area.properties['stroke-opacity'] * 0.5}
-                  color={area.properties.stroke}
-                  stroke={true}
-                  positions={positions as LatLngExpression[]}
-                  key={index}
-                >
-                  <Popup>
-                    <h3
-                      dangerouslySetInnerHTML={{ __html: area.properties.desc }}
-                    />
-                  </Popup>
-                </Polygon>
-              )
-            }
-            return null
-          })}
+        <Polygons risks={risks} zones={zones}/>
+        
         {markers.length > 0 &&
           markers.map((marker) => {
             // const x = {
