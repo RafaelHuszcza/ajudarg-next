@@ -11,13 +11,14 @@ export interface Marker {
   lat: number
   lng: number
   type: string
-  needs: string[]
+  needs: { name: string; amount: number }[]
   address: string
   hours?: string
   WhatsApp?: string
   phone?: string
   meals?: number
   responsibleEmail?: string
+  newNeeds?: { name: string; amount: number }[]
 }
 export function useEditMarker() {
   const { id } = useParams()

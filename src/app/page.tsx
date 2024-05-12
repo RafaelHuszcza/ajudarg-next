@@ -53,6 +53,7 @@ export default async function Page() {
     getRiskAreas(),
     getImpactZones(),
   ])
+  console.log(markers)
 
   return (
     <main className="h-[calc(100vh-5rem)] w-full">

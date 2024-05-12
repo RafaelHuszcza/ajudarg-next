@@ -91,19 +91,25 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
                     </>
                   )}
 
-                  {marker.newNeeds && marker.newNeeds.length > 0 && (
+                  {marker.needs && marker.needs.length > 0 && (
                     <>
                       <SelectSeparator />
                       <span className="text-semibold m-0 p-0 text-sm ">
                         Necessidades:
                       </span>
                       <div className="flex flex-col  text-sm font-light">
-                        {marker.newNeeds.map((need) => (
-                          <div className="flex justify-between" key={need.id}>
-                            <span>{need.name}</span>
-                            <span>{need.amount}</span>
-                          </div>
-                        ))}
+                        {marker.needs.map((need, index) => {
+                          const newNeeds: { name: string; amount: number } =
+                            typeof need === 'string'
+                              ? { name: need, amount: 10 }
+                              : need
+                          return (
+                            <div className="flex justify-between" key={index}>
+                              <span>{newNeeds.name}</span>
+                              <span>{newNeeds.amount}</span>
+                            </div>
+                          )
+                        })}
                       </div>
                     </>
                   )}

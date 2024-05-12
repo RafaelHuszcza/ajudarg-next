@@ -20,7 +20,7 @@ interface FormMarkers {
     lat: number
     lng: number
     type: string
-    needs: { value: string }[]
+    needs: { name: string; amount: number }[]
     address: string
     hours?: string
     WhatsApp?: string
@@ -29,7 +29,6 @@ interface FormMarkers {
     vacancies: number
     occupation: number
     responsibleEmail: string
-    newNeeds: { name: string; amount: number }[]
   }
 }
 const formSchema = z.object({
@@ -41,7 +40,9 @@ const formSchema = z.object({
   type: z.string({ required_error: 'Tipo é necessário' }).min(3, {
     message: 'Tipo é necessário',
   }),
-  needs: z.array(z.object({ value: z.string() })).default([]),
+  needs: z
+    .array(z.object({ name: z.string(), amount: z.coerce.number().default(0) }))
+    .default([]),
   address: z.string({ required_error: 'Endereço é necessário' }).min(3, {
     message: 'Endereço é necessário',
   }),
@@ -59,9 +60,6 @@ const formSchema = z.object({
   occupation: z.coerce.number({
     required_error: 'Vagas ocupadas é necessário',
   }),
-  newNeeds: z
-    .array(z.object({ name: z.string(), amount: z.coerce.number().default(0) }))
-    .default([]),
 })
 
 export type FormData = z.infer<typeof formSchema>
@@ -75,7 +73,11 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
       lat: defaultValues?.lat ?? 0,
       lng: defaultValues?.lng ?? 0,
       type: defaultValues?.type ?? '',
-      needs: defaultValues?.needs ?? [{ value: '' }],
+      needs: defaultValues?.needs
+        ? defaultValues?.needs.length > 0
+          ? defaultValues?.needs
+          : [{ name: '', amount: 0 }]
+        : [{ name: '', amount: 0 }],
       address: defaultValues?.address ?? '',
       hours: defaultValues?.hours ?? '',
       WhatsApp: defaultValues?.WhatsApp ?? '',
@@ -84,11 +86,6 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
       responsibleEmail: defaultValues?.responsibleEmail ?? '',
       vacancies: defaultValues?.vacancies ?? 0,
       occupation: defaultValues?.occupation ?? 0,
-      newNeeds: defaultValues?.newNeeds
-        ? defaultValues?.newNeeds.length > 0
-          ? defaultValues?.newNeeds
-          : [{ name: '', amount: 0 }]
-        : [{ name: '', amount: 0 }],
     },
   })
 
@@ -97,10 +94,9 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
     register,
     formState: { isSubmitting, errors },
   } = form
-
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: 'newNeeds',
+    name: 'needs',
   })
 
   const addNewNeed = () => {
@@ -109,14 +105,11 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
   const createMarker = useCreateMarker()
   const editMarker = useEditMarker()
   const onSubmit = handleSubmit(async (data: FormData) => {
-    const formattedNeeds = data.needs.map((need) => need.value)
-    console.log(formattedNeeds)
-    const dataToSend = { ...data, needs: formattedNeeds }
     if (method === 'PUT') {
-      editMarker.mutate(dataToSend)
+      await editMarker.mutateAsync(data)
     }
     if (method === 'POST') {
-      createMarker.mutate(dataToSend)
+      await createMarker.mutateAsync(data)
     }
   })
   if (editMarker.isSuccess) {
@@ -197,27 +190,27 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
 
           {fields.map((field, index) => (
             <div className="max-w-[277px] space-y-2" key={index}>
-              <Label htmlFor={`newNeeds-${index}`}>Necessidades</Label>
+              <Label htmlFor={`needs-${index}`}>Necessidades</Label>
               <div className="flex w-full gap-2">
                 <div className="w-full min-w-0">
                   <Input
                     className="w-full"
-                    id={`newNeeds-${index}`}
+                    id={`needs-${index}`}
                     placeholder="Insira uma necessidade do local"
-                    {...register(`newNeeds.${index}.name`)}
+                    {...register(`needs.${index}.name`)}
                   />
                   <ErrorMessage
                     className="absolute bottom-[-22px] m-0 p-0"
                     errors={errors}
-                    name="newNeeds"
+                    name="needs"
                   />
                 </div>
                 <Input
                   className="w-20 min-w-0"
                   type="number"
-                  id={`newNeeds-${index}`}
+                  id={`needs-${index}`}
                   placeholder="Quantidade"
-                  {...register(`newNeeds.${index}.amount`)}
+                  {...register(`needs.${index}.amount`)}
                 />
                 <Button
                   type="button"
