@@ -6,6 +6,7 @@ import L, { LatLngExpression } from 'leaflet'
 import { useEffect, useState } from 'react'
 import { MapContainer, TileLayer } from 'react-leaflet'
 
+import { Alert } from './alert'
 import { Markers } from './markers'
 import { MarkersLegends } from './markers-legends'
 import { ZonesPolygons } from './zones-polygons'
@@ -142,6 +143,7 @@ const Map = ({ markers, risks, zones }: MapsProps) => {
           goldIcon={GoldIcon}
           markers={markers}
         />
+        <Alert />
       </MapContainer>
     </>
   )
