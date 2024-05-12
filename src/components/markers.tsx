@@ -41,10 +41,17 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
 
           const newNeeds = newNeedsString.map((need) => {
             if (typeof need === 'string') {
-              return { name: need, amount: 0 }
+              try {
+                return JSON.parse(need)
+              } catch {
+                return { name: need, amount: 0 }
+              }
             }
             return need
           })
+          if (marker.name === 'E.M.E.F Anselmo Dias Lopes') {
+            console.log()
+          }
 
           return (
             <LMarker
