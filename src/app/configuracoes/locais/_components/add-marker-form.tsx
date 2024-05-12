@@ -105,6 +105,8 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
   const createMarker = useCreateMarker()
   const editMarker = useEditMarker()
   const onSubmit = handleSubmit(async (data: FormData) => {
+    const newNeeds = data.needs.filter((need) => need.name !== '')
+    data.needs = newNeeds
     if (method === 'PUT') {
       await editMarker.mutateAsync(data)
     }

@@ -15,7 +15,6 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
   const formatDate = (dateString: Date) => {
     if (!dateString) return ''
     const date = new Date(dateString)
-    // Change locale and options as needed
     return date.toLocaleString('pt-BR', {
       day: 'numeric',
       month: 'long',
@@ -38,6 +37,15 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
     <>
       {markers.length > 0 &&
         markers.map((marker) => {
+          const newNeedsString = marker.needs.filter((need) => need !== '')
+
+          const newNeeds = newNeedsString.map((need) => {
+            if (typeof need === 'string') {
+              return { name: need, amount: 0 }
+            }
+            return need
+          })
+
           return (
             <LMarker
               icon={verifyMarkerType(marker.type)}
@@ -91,25 +99,19 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
                     </>
                   )}
 
-                  {marker.needs && marker.needs.length > 0 && (
+                  {newNeeds && newNeeds.length > 0 && (
                     <>
                       <SelectSeparator />
                       <span className="text-semibold m-0 p-0 text-sm ">
                         Necessidades:
                       </span>
                       <div className="flex flex-col  text-sm font-light">
-                        {marker.needs.map((need, index) => {
-                          const newNeeds: { name: string; amount: number } =
-                            typeof need === 'string'
-                              ? { name: need, amount: 0 }
-                              : need
-                          return (
-                            <div className="flex justify-between" key={index}>
-                              <span>{newNeeds.name}</span>
-                              <span>{newNeeds.amount}</span>
-                            </div>
-                          )
-                        })}
+                        {newNeeds.map((need, index) => (
+                          <div className="flex justify-between" key={index}>
+                            <span>{need?.name}</span>
+                            <span>{need?.amount}</span>
+                          </div>
+                        ))}
                       </div>
                     </>
                   )}

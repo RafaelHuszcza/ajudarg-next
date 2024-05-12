@@ -1,6 +1,6 @@
 'use client'
 
-import { SidebarCloseIcon, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { useState } from 'react'
 
 export const Alert = () => {
