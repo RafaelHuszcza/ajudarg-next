@@ -37,7 +37,7 @@ export default function RootLayout({
           <div className="flex h-screen w-full flex-col">
             <Header />
             {children}
-            <GoogleAnalytics gaId="GTM-WRJLDNJW" />
+            <GoogleAnalytics gaId="G-LF1NS6E9TF" />
           </div>
         </Providers>
       </body>
