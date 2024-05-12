@@ -53,9 +53,9 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
                     {marker.name}
                   </h2>
                   <span className="text-md">{marker.address}</span>
-                  {marker.responsibleName && (
+                  {marker.phone && (
                     <span className="text-md flex flex-wrap items-center gap-2">
-                      {`${marker.responsibleName ? marker.responsibleName : ''} - ${marker.responsibleNumber ? marker.responsibleNumber : ''}`}
+                      ${marker.phone}
                     </span>
                   )}
                   {marker.hours && (
