@@ -55,7 +55,7 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
                   <span className="text-md">{marker.address}</span>
                   {marker.phone && (
                     <span className="text-md flex flex-wrap items-center gap-2">
-                      ${marker.phone}
+                      {marker.phone}
                     </span>
                   )}
                   {marker.hours && (
