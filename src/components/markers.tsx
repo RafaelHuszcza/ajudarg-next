@@ -101,7 +101,7 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
                         {marker.needs.map((need, index) => {
                           const newNeeds: { name: string; amount: number } =
                             typeof need === 'string'
-                              ? { name: need, amount: 10 }
+                              ? { name: need, amount: 0 }
                               : need
                           return (
                             <div className="flex justify-between" key={index}>
