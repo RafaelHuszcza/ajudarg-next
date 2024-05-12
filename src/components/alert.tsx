@@ -25,7 +25,7 @@ export const Alert = () => {
         site oficial. Para informações oficiais, acesse o site oficial em{' '}
         <a
           target="_blank"
-          className="w-full text-center text-background underline hover:text-accent dark:text-foreground dark:hover:text-accent"
+          className="w-full text-center !text-background underline hover:text-accent dark:text-foreground dark:hover:text-accent"
           href="https://abrigars.com.br"
         >
           abrigars.com.br
