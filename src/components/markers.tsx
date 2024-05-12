@@ -109,8 +109,13 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
                   {newNeeds && newNeeds.length > 0 && (
                     <>
                       <SelectSeparator />
-                      <span className="text-semibold m-0 p-0 text-sm ">
-                        Necessidades:
+                      <span className="m-0 p-0 text-sm font-bold ">
+                        Necessidades:{' '}
+                        <span className="m-0 p-0 text-xs font-semibold ">
+                          {
+                            ' Quantidade -1 refere-se a necessidades com quantidade indefinida'
+                          }
+                        </span>
                       </span>
                       <div className="flex flex-col  text-sm font-light">
                         {newNeeds.map((need, index) => (
