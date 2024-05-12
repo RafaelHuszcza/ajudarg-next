@@ -21,7 +21,7 @@ export const Alert = () => {
       <h2 className="text-center text-lg font-semibold">Atenção</h2>
       <span>
         Apesar de não sermos a fonte oficial da prefeitura de Rio grande, iremos
-        continuar mantendo atualizadas as informações. Para o canal oficial ⏎········acesse {' '}
+        continuar mantendo atualizadas as informações. Para o canal oficial {' '}
         <a
           target="_blank"
           className="w-full text-center !text-background underline hover:text-accent dark:text-foreground dark:hover:text-accent"
