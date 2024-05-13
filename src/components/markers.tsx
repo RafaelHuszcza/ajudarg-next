@@ -109,7 +109,7 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
                       <span className="m-0 p-0 text-sm font-bold ">
                         Necessidades:
                       </span>
-                      <div className="scrollbar-thin scrollbar-webkit flex max-h-44 flex-col overflow-auto text-sm font-light">
+                      <div className="flex max-h-44 flex-col overflow-auto text-sm font-light scrollbar-webkit">
                         {newNeeds.map((need, index) => (
                           <div className="flex justify-between" key={index}>
                             <span>{need?.name}</span>
