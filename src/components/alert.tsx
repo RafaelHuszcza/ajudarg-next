@@ -13,7 +13,7 @@ export const Alert = () => {
   }
   return (
     <div
-      className={`absolute  left-20 top-4 z-[999] max-w-60 flex-col items-center gap-2 rounded-md bg-primary  p-4 text-justify text-background dark:text-foreground`}
+      className={`absolute  left-20 top-20 z-[999] max-w-60 flex-col items-center gap-2 rounded-md bg-primary p-4  text-justify text-background dark:text-foreground md:top-4`}
     >
       <button className="absolute right-2 top-2" onClick={() => closeAlert()}>
         <X />

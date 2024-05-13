@@ -1,8 +1,8 @@
 import '@/styles/globals.css'
 
+import { GoogleAnalytics } from '@next/third-parties/google'
 import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
-import { GoogleAnalytics } from '@next/third-parties/google'
 
 import { Header } from '@/components/header'
 import { cn } from '@/lib/utils'
@@ -32,7 +32,6 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-
         <Providers>
           <div className="flex h-screen w-full flex-col">
             <Header />

@@ -15,6 +15,7 @@
     "@headlessui/react": "^2.0.3",
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^3.3.4",
+    "@next/third-parties": "^14.2.3",
     "@prisma/client": "^5.13.0",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",

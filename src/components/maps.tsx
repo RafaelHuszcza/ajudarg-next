@@ -103,20 +103,9 @@ const Map = ({ markers, risks, zones }: MapsProps) => {
     risk: true,
     impact: false,
   })
-  // const closeMarket = () => {
-  //   setMarkerOpen(null)
-  // }
 
   return (
     <>
-      {/* <Sheet open={!!marketOpen} onOpenChange={closeMarket}>
-        <SheetContent>
-          <SheetHeader>
-            <SheetTitle>Edit profile</SheetTitle>
-            <SheetDescription>aaaa</SheetDescription>
-          </SheetHeader>
-        </SheetContent>
-      </Sheet> */}
       <MapContainer className="z-10 h-full w-full" center={coord} zoom={13}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

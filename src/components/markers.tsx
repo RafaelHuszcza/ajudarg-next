@@ -49,9 +49,6 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
             }
             return need
           })
-          if (marker.name === 'E.M.E.F Anselmo Dias Lopes') {
-            console.log()
-          }
 
           return (
             <LMarker
@@ -110,18 +107,15 @@ export function Markers({ markers, blueIcon, redIcon, goldIcon }: MarkerProps) {
                     <>
                       <SelectSeparator />
                       <span className="m-0 p-0 text-sm font-bold ">
-                        Necessidades:{' '}
-                        <span className="m-0 p-0 text-xs font-semibold ">
-                          {
-                            ' Quantidade -1 refere-se a necessidades com quantidade indefinida'
-                          }
-                        </span>
+                        Necessidades:
                       </span>
-                      <div className="flex flex-col  text-sm font-light">
+                      <div className="scrollbar-thin scrollbar-webkit flex max-h-44 flex-col overflow-auto text-sm font-light">
                         {newNeeds.map((need, index) => (
                           <div className="flex justify-between" key={index}>
                             <span>{need?.name}</span>
-                            <span>{need?.amount}</span>
+                            {!(need?.amount === -1 || need?.amount === 0) && (
+                              <span className="pr-2">{need?.amount}</span>
+                            )}
                           </div>
                         ))}
                       </div>
