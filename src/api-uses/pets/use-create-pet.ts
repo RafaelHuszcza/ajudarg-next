@@ -1,0 +1,40 @@
+'use client'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+
+import { apiClient } from '../api-client'
+import { petsRoute } from '../routes'
+import { petQueryKeys } from './pet-query-keys'
+import { Pet } from './use-edit-pet'
+
+const createPetFn = async (newPet: Pet) => {
+  const response = await apiClient.post(petsRoute, newPet)
+  return response.data
+}
+
+export function useCreatePet() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: createPetFn,
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: petQueryKeys.all })
+    },
+    onSuccess: () => {
+      toast.success('Localização', {
+        description: 'Localização criada com sucesso',
+      })
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (err, newPet, context?: any) => {
+      console.log('Error creating new pet', err)
+      toast.success('Localização', {
+        description: 'Erro ao criar localização',
+      })
+      queryClient.setQueryData(petQueryKeys.all, context.previousPet)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: petQueryKeys.all })
+    },
+  })
+}

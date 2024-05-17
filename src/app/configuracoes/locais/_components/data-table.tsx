@@ -26,7 +26,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-import { DataTableToolbar } from './data-table-toolbar-tools'
+import { DataTableToolbar } from './data-table-toolbar'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
