@@ -1,6 +1,6 @@
 'use client'
 
-import { MenuIcon, Store } from 'lucide-react'
+import { MenuIcon, PawPrint, Store } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
@@ -25,6 +25,11 @@ export function MainSidebar() {
       href: '/configuracoes/locais',
       label: 'Meus Locais',
       icon: <Store />,
+    },
+    {
+      href: '/configuracoes/pets',
+      label: 'Meus Pets',
+      icon: <PawPrint />,
     },
   ]
 

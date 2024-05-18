@@ -7,18 +7,13 @@ import { apiClient } from '../api-client'
 import { petsRoute } from '../routes'
 import { petQueryKeys } from './pet-query-keys'
 export interface Pet {
-  name: string
-  lat: number
-  lng: number
-  type: string
-  needs: { name: string; amount: number }[]
-  address: string
-  hours?: string
-  WhatsApp?: string
-  phone?: string
-  meals?: number
-  responsibleEmail?: string
-  newNeeds?: { name: string; amount: number }[]
+  specie: string
+  color: string
+  size: string
+  imageUrl?: string
+  breed?: string
+  tag?: string
+  localId: string
 }
 export function useEditPet() {
   const { id } = useParams()
@@ -42,15 +37,15 @@ export function useEditPet() {
       return { previousPet, updatedPet }
     },
     onSuccess: () => {
-      toast.success('Localização', {
-        description: 'Localização editada com sucesso',
+      toast.success('Pet', {
+        description: 'Pet editado com sucesso',
       })
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (err, newPet, context?: any) => {
       console.log('Error creating new pet', err)
-      toast.success('Localização', {
-        description: 'Erro ao editar localização',
+      toast.error('Pet', {
+        description: 'Erro ao editar Pet',
       })
       queryClient.setQueryData(petQueryKeys.all, context.previousPet)
     },

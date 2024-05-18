@@ -82,7 +82,6 @@ export async function POST(request: Request) {
       hours: marker.hours,
       WhatsApp: marker.WhatsApp,
       phone: marker.phone,
-      meals: marker.meals,
     },
   })
 

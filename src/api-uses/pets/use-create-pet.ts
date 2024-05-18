@@ -21,15 +21,15 @@ export function useCreatePet() {
       await queryClient.cancelQueries({ queryKey: petQueryKeys.all })
     },
     onSuccess: () => {
-      toast.success('Localização', {
-        description: 'Localização criada com sucesso',
+      toast.success('Pet', {
+        description: 'Pet criado com sucesso',
       })
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (err, newPet, context?: any) => {
       console.log('Error creating new pet', err)
-      toast.success('Localização', {
-        description: 'Erro ao criar localização',
+      toast.error('Pet', {
+        description: 'Erro ao criar Pet',
       })
       queryClient.setQueryData(petQueryKeys.all, context.previousPet)
     },

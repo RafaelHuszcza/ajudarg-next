@@ -62,9 +62,9 @@ model Local {
 
 model Animal {
   id       String  @id @default(cuid())
-  imageUrl String?
-  local    Local?  @relation(fields: [localId], references: [id])
-  localId  String?
+  imageUrl String
+  local    Local   @relation(fields: [localId], references: [id])
+  localId  String
   tag      String?
   breed    String?
   specie   String

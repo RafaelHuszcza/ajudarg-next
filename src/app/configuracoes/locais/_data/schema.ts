@@ -11,7 +11,6 @@ export const markersSchema = z.object({
   hours: z.string().nullable(),
   WhatsApp: z.string().nullable(),
   phone: z.string().nullable(),
-  meals: z.number().nullable(),
   vacancies: z.number(),
   occupation: z.number(),
   type: z.string(),

@@ -28,7 +28,7 @@ export function useCreateMarker() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (err, newMarker, context?: any) => {
       console.log('Error creating new marker', err)
-      toast.success('Localização', {
+      toast.error('Localização', {
         description: 'Erro ao criar localização',
       })
       queryClient.setQueryData(markerQueryKeys.all, context.previousMarker)

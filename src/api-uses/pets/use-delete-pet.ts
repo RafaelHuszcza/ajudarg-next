@@ -18,14 +18,14 @@ export function useDeletePet() {
       await queryClient.cancelQueries({ queryKey: petQueryKeys.all })
     },
     onSuccess: () => {
-      toast.success('Excluir local', {
-        description: 'Local excluído com sucesso',
+      toast.success('Excluir Pet', {
+        description: 'Pet excluído com sucesso',
       })
     },
     onError: () => {
       queryClient.invalidateQueries({ queryKey: petQueryKeys.all })
-      toast.error('Erro ao excluir local', {
-        description: 'Erro ao excluir local',
+      toast.error('Erro ao excluir Pet', {
+        description: 'Erro ao excluir Pet',
       })
     },
     onSettled: () => {

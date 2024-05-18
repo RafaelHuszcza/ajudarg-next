@@ -2,18 +2,17 @@
 
 import { usePets } from '@/api-uses/pets'
 
-import { Pets } from '../_data/schema'
+import { Pet } from '../_data/schema'
 import { columns } from './columns'
-import { DataGrid } from './data-grid'
+import { DataTable } from './data-table'
 
-export function PetsGridClient() {
+export function DataTableClient() {
   const { data: pets, isLoading, isSuccess } = usePets()
-
   return (
-    <div className="flex w-full flex-1 flex-col p-10">
+    <div className="container h-full min-w-[32rem] py-10">
       {isLoading && <p>Carregando...</p>}
       {isSuccess && (
-        <DataGrid columns={columns} data={pets as unknown as Pets[]} />
+        <DataTable columns={columns} data={pets as unknown as Pet[]} />
       )}
     </div>
   )

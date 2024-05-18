@@ -34,10 +34,10 @@ export function DataGrid<TData, TValue>({
   })
 
   return (
-    <div className="h-full  space-y-4 ">
+    <div className="h-[80vh] space-y-4">
       <DataGridToolbar table={table} />
-      <div className="grid  w-full grid-cols-1 gap-4  sm:grid-cols-2">
-        {table.getRowModel().rows?.length &&
+      <div className="grid h-[calc(100%-4rem)] w-full grid-cols-1 gap-4 overflow-auto sm:grid-cols-2">
+        {table.getRowModel().rows?.length > 0 &&
           table.getRowModel().rows.map((row) => {
             const pet = row.getVisibleCells()[0].row.original as Pet
 
