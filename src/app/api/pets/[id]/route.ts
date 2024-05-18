@@ -119,23 +119,32 @@ export async function DELETE(
       status: 401,
     })
   }
-  const markerDB = await prisma.local.findFirst({
+  const petDB = await prisma.animal.findFirst({
     where: { id: petId },
-    select: { responsibleUserId: true },
+    select: { localId: true },
   })
-  if (!markerDB) {
+  if (!petDB) {
     return new NextResponse(JSON.stringify({ error: 'Pet não encontrado' }), {
       status: 404,
     })
   }
-  if (markerDB.responsibleUserId !== userDB.id) {
+  const localDB = await prisma.local.findFirst({
+    where: {
+      id: petDB.localId,
+    },
+    select: {
+      responsibleUserId: true,
+    },
+  })
+
+  if (localDB?.responsibleUserId !== userDB.id) {
     return new NextResponse(
       JSON.stringify({ error: 'Usuário não autorizado' }),
       { status: 401 },
     )
   }
 
-  await prisma.local.delete({
+  await prisma.animal.delete({
     where: { id: petId },
   })
 
