@@ -16,7 +16,6 @@ export interface Marker {
   hours?: string
   WhatsApp?: string
   phone?: string
-  meals?: number
   responsibleEmail?: string
   newNeeds?: { name: string; amount: number }[]
 }
