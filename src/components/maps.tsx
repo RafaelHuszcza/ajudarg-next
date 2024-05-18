@@ -19,6 +19,7 @@ export type Marker = {
   needs: { name: string; amount: number }[] | string[]
   address: string
   WhatsApp?: string
+  meals?: number
   phone?: string
   hours?: string
   vacancies: number

@@ -64,6 +64,7 @@ export async function PUT(
     hours: z.string({ required_error: 'Horário é necessário' }).optional(),
     WhatsApp: z.string({ required_error: 'WhatsApp é necessário' }).optional(),
     phone: z.string({ required_error: 'Telefone é necessário' }).optional(),
+    meals: z.number().int({ message: 'Refeições é necessário' }).optional(),
     vacancies: z.number({ required_error: 'Vagas é necessário' }),
     occupation: z.number({ required_error: 'Ocupação é necessário' }),
   })
@@ -91,7 +92,8 @@ export async function PUT(
       occupation: marker.occupation,
       hours: marker.hours,
       WhatsApp: marker.WhatsApp,
-      phone: marker.phone
+      phone: marker.phone,
+      meals: marker.meals,
     },
   })
 
@@ -227,6 +229,7 @@ export async function GET(
     hours: string | null
     WhatsApp: string | null
     phone: string | null
+    meals: number | null
     responsibleEmail: string
   }
 
