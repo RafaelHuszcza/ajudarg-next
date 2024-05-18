@@ -5,7 +5,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
 
 import { Marker } from '../_data/schema'
-import { DataTableRowActions } from './data-table-row-actions-tools'
+import { DataTableRowActions } from './data-table-row-actions'
 
 export const columns: ColumnDef<Marker>[] = [
   {

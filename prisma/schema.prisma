@@ -40,8 +40,8 @@ model Phone {
 }
 
 model Local {
-  id                String    @id @default(cuid())
-  name              String    @unique
+  id                String   @id @default(cuid())
+  name              String   @unique
   lat               Float
   lng               Float
   type              String
@@ -51,19 +51,23 @@ model Local {
   address           String
   phone             String?
   hours             String?
-  responsible       User      @relation(fields: [responsibleUserId], references: [id])
+  responsible       User     @relation(fields: [responsibleUserId], references: [id])
   responsibleUserId String
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
   WhatsApp          String?
-  meals             Int?
-  newNeeds          NewNeed[]
+  isAnimalShelter   Boolean  @default(false)
+  Animal            Animal[]
 }
 
-model NewNeed {
-  id      String  @id @default(cuid())
-  name    String
-  amount  String
-  local   Local?  @relation(fields: [localId], references: [id])
-  localId String?
+model Animal {
+  id       String  @id @default(cuid())
+  imageUrl String
+  local    Local   @relation(fields: [localId], references: [id])
+  localId  String
+  tag      String?
+  breed    String?
+  specie   String
+  size     String
+  color    String
 }

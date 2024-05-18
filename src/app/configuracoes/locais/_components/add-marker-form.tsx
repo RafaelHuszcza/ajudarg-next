@@ -25,7 +25,6 @@ interface FormMarkers {
     hours?: string
     WhatsApp?: string
     phone?: string
-    meals?: number
     vacancies: number
     occupation: number
     responsibleEmail: string
@@ -49,10 +48,6 @@ const formSchema = z.object({
   hours: z.string({ required_error: 'Horário é necessário' }).optional(),
   WhatsApp: z.string({ required_error: 'WhatsApp é necessário' }).optional(),
   phone: z.string({ required_error: 'Telefone é necessário' }).optional(),
-  meals: z.coerce
-    .number()
-    .int({ message: 'Refeições é necessário' })
-    .optional(),
   responsibleEmail: z
     .string({ required_error: 'Email é necessário' })
     .optional(),
@@ -82,7 +77,6 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
       hours: defaultValues?.hours ?? '',
       WhatsApp: defaultValues?.WhatsApp ?? '',
       phone: defaultValues?.phone ?? '',
-      meals: defaultValues?.meals ?? 0,
       responsibleEmail: defaultValues?.responsibleEmail ?? '',
       vacancies: defaultValues?.vacancies ?? 0,
       occupation: defaultValues?.occupation ?? 0,
@@ -107,19 +101,20 @@ export function AddMarkerForm({ method, defaultValues }: FormMarkers) {
   const onSubmit = handleSubmit(async (data: FormData) => {
     const newNeeds = data.needs.filter((need) => need.name !== '')
     data.needs = newNeeds
-    if (method === 'PUT') {
-      await editMarker.mutateAsync(data)
-    }
-    if (method === 'POST') {
-      await createMarker.mutateAsync(data)
+    try {
+      if (method === 'PUT') {
+        await editMarker.mutateAsync(data)
+        router.push('/configuracoes/locais')
+      }
+      if (method === 'POST') {
+        await createMarker.mutateAsync(data)
+        router.push('/configuracoes/locais')
+      }
+    } catch (err) {
+      console.log(err)
     }
   })
-  if (editMarker.isSuccess) {
-    router.push('/configuracoes/locais')
-  }
-  if (createMarker.isSuccess) {
-    router.push('/configuracoes/locais')
-  }
+
   return (
     <Card className="mx-auto my-12  h-auto   w-full max-w-[90%]   border-2 border-primary">
       <CardHeader className="space-y-1">

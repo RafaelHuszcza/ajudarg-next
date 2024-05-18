@@ -61,7 +61,7 @@ export function DataTable<TData, TValue>({
   })
   const rowsDifference = table.getRowModel().rows?.length < 10
   return (
-    <div className="h-full  space-y-4 ">
+    <div className="h-full space-y-4 ">
       <DataTableToolbar table={table} />
       <div className="overflow-hidden rounded-md border border-primary bg-background">
         <Table>
