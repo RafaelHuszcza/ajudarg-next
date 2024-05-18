@@ -91,7 +91,7 @@ export async function PUT(
       occupation: marker.occupation,
       hours: marker.hours,
       WhatsApp: marker.WhatsApp,
-      phone: marker.phone,
+      phone: marker.phone
     },
   })
 
