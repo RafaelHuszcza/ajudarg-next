@@ -88,10 +88,9 @@ export function AddPetForm({ method, defaultValues }: FormPet) {
       endpoint: process.env.NEXT_PUBLIC_MINIO_URL!,
       accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY!,
       secretAccessKey: process.env.NEXT_PUBLIC_SECRET_KEY!,
-      sslEnabled: false,
+      sslEnabled: true,
       s3ForcePathStyle: true,
     })
-
     try {
       let imageUrl = data.imageUrl
       if (data?.image?.length > 0) {
