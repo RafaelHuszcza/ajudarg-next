@@ -86,8 +86,8 @@ export function AddPetForm({ method, defaultValues }: FormPet) {
     const file: File = data.image[0]
     const s3 = new S3({
       endpoint: process.env.NEXT_PUBLIC_MINIO_URL!,
-      accessKeyId: 'VPP0fkoCyBZx8YU0QTjH',
-      secretAccessKey: 'iFq6k8RLJw5B0faz0cKCXeQk0w9Q8UdtaFzHuw4J',
+      accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY!,
+      secretAccessKey: process.env.NEXT_PUBLIC_SECRET_KEY!,
       sslEnabled: false,
       s3ForcePathStyle: true,
     })
