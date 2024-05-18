@@ -28,7 +28,7 @@ export const MarkersLegends = ({
       {collapsed ? (
         <div
           id="legend"
-          className=" absolute bottom-[5svh] right-[2svh] z-[999]  rounded-lg bg-background p-3 text-foreground shadow-md sm:bottom-[5vh]"
+          className=" absolute bottom-[10svh] right-[2svh] z-[999]  rounded-lg bg-background p-3 text-foreground shadow-md sm:bottom-[5vh]"
         >
           <CaptionsOff
             onClick={changeCollapse}
@@ -133,7 +133,7 @@ export const MarkersLegends = ({
         </div>
       ) : (
         <Button
-          className="absolute bottom-[5svh] right-[2svh] z-[999] dark:text-foreground"
+          className="absolute bottom-[10svh] right-[2svh] z-[999] dark:text-foreground"
           onClick={changeCollapse}
           variant="default"
         >

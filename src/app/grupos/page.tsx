@@ -1,7 +1,7 @@
 import { GroupsTable } from './_components/groups-table'
 const getGroups = async () => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/groups`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/groups`, {
       method: 'GET',
       next: { tags: ['groups'] },
     })

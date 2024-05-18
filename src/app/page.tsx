@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic'
 
 const getMarkers = async () => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/markers`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/markers`, {
       method: 'GET',
       cache: 'no-cache',
     })

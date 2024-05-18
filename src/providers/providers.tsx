@@ -7,7 +7,8 @@ import { Toaster } from '@/components/ui/sonner'
 import { ThemeProvider } from './theme-provider'
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient({})
+
   return (
     <SessionProvider>
       <ThemeProvider

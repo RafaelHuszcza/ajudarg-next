@@ -5,9 +5,30 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 
 import { prisma } from '../database'
 
+declare module 'next-auth' {
+  interface Session {
+    user: {
+      id: string
+      email: string
+      name: string
+    }
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    id?: string
+  }
+}
+interface User {
+  id: string
+  email: string
+  name: string
+}
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60,
   },
   pages: {
     signIn: '/auth',
@@ -46,34 +67,28 @@ export const authOptions: NextAuthOptions = {
         }
 
         return {
-          id: user.id + '',
+          id: user.id,
           email: user.email,
           name: user.name,
-          randomKey: 'Hey cool',
-        }
+        } as User
       },
     }),
   ],
   callbacks: {
-    session: ({ session, token }) => {
-      console.log('Session Callback', { session, token })
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+      }
+      return token
+    },
+    async session({ session, token }) {
       return {
         ...session,
         user: {
           ...session.user,
           id: token.id,
-          randomKey: token.randomKey,
         },
       }
-    },
-    jwt: ({ token, user }) => {
-      if (user) {
-        return {
-          ...token,
-          id: user.id,
-        }
-      }
-      return token
     },
   },
 }

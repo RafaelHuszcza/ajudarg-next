@@ -1,7 +1,7 @@
 import { PhonesTable } from './_components/phones-table'
 const getPhones = async () => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/phones`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/phones`, {
       method: 'GET',
       next: { tags: ['groups'] },
     })

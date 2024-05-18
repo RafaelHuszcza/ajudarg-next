@@ -6,13 +6,18 @@ import { petQueryKeys } from './pet-query-keys'
 
 export function usePets() {
   const getPetsFn = async () => {
-    const response = await apiClient.get(`${petsRoute}`)
-    return response.data
+    try {
+      const response = await apiClient.get(`${petsRoute}`)
+      return response.data
+    } catch (err) {
+      return []
+    }
   }
 
   return useQuery({
     queryKey: petQueryKeys.all,
     queryFn: () => getPetsFn(),
     placeholderData: keepPreviousData,
+    networkMode: 'always',
   })
 }
