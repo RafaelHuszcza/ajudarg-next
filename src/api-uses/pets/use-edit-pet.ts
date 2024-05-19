@@ -19,7 +19,8 @@ export function useEditPet() {
   const { id } = useParams()
   const queryClient = useQueryClient()
 
-  const editPetFn = async (updatedPet: Pet) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const editPetFn = async (updatedPet: any) => {
     const response = await apiClient.put(`${petsRoute}/${id}`, updatedPet)
     return response
   }

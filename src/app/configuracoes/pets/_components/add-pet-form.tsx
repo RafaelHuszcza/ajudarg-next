@@ -1,12 +1,9 @@
 'use client'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { S3 } from 'aws-sdk'
-import { File } from 'buffer'
 import { LoaderCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { v4 as uuidv4 } from 'uuid'
 import z from 'zod'
 
 import { useMarkers } from '@/api-uses/markers'
@@ -83,44 +80,27 @@ export function AddPetForm({ method, defaultValues }: FormPet) {
   const createPet = useCreatePet()
   const editPet = useEditPet()
   const onSubmit = handleSubmit(async (data: FormData) => {
-    const file: File = data.image[0]
-    const s3 = new S3({
-      endpoint: process.env.NEXT_PUBLIC_MINIO_URL!,
-      accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY!,
-      secretAccessKey: process.env.NEXT_PUBLIC_SECRET_KEY!,
-      sslEnabled: true,
-      s3ForcePathStyle: true,
-    })
+    if (data.image.length > 0) {
+      data.image = data.image[0]
+    }
+
+    const formData = new FormData()
+    Object.keys(data).forEach((item) =>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      formData.append(item, (data as any)[item]),
+    ) // Doença extrema
+
     try {
-      let imageUrl = data.imageUrl
-      if (data?.image?.length > 0) {
-        const imageId = uuidv4() + '.' + (file.type.split('/')[1] ?? file.type)
-        await s3
-          .putObject({
-            Bucket: 'images',
-            Key: imageId,
-            Body: file,
-          })
-          .promise()
-        imageUrl = process.env.NEXT_PUBLIC_BUCKET_URL! + imageId
-      }
-
-      delete data.image
-      const newData: FormData = {
-        ...data,
-        imageUrl,
-      }
-
       if (method === 'PUT') {
-        await editPet.mutateAsync(newData)
+        await editPet.mutateAsync(formData)
         router.push('/configuracoes/pets')
       }
       if (method === 'POST') {
-        await createPet.mutateAsync(newData)
+        await createPet.mutateAsync(formData)
         router.push('/configuracoes/pets')
       }
-    } catch (err) {
-      console.log(err)
+    } catch (e) {
+      console.log(e)
     }
   })
 
