@@ -1,4 +1,6 @@
+import { S3 } from 'aws-sdk'
 import { NextResponse } from 'next/server'
+import { v4 as uuidv4 } from 'uuid'
 
 import { getServerSessionWithAuth } from '@/services/auth'
 import { prisma } from '@/services/database'
@@ -19,25 +21,25 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const data = await request.formData()
     const session = await getServerSessionWithAuth()
     if (!session || !session.user?.email) {
       return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
         status: 401,
       })
     }
-    const { specie, color, size, breed, tag, imageUrl, localId } =
-      await request.json()
 
     const userDB = await prisma.user.findFirst({
       where: { email: session.user.email },
       select: { id: true },
     })
-
     if (!userDB) {
       return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
         status: 401,
       })
     }
+
+    const localId = data.get('localId') as string
     const localDB = await prisma.local.findFirst({
       where: { id: localId, responsibleUserId: userDB.id },
     })
@@ -50,6 +52,37 @@ export async function POST(request: Request) {
       )
     }
 
+    const s3 = new S3({
+      endpoint: process.env.NEXT_PUBLIC_MINIO_URL!,
+      accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY!,
+      secretAccessKey: process.env.NEXT_PUBLIC_SECRET_KEY!,
+      sslEnabled: true,
+      s3ForcePathStyle: true,
+    })
+
+    const specie = data.get('specie') as string
+    const color = data.get('color') as string
+    const size = data.get('size') as string
+    const breed = data.get('breed') as string
+    const tag = data.get('tag') as string
+    const image: File = data.get('image') as File
+
+    if (!image) {
+      return NextResponse.json(
+        { message: 'A imagem do pet é obirgatória ao criá-lo' },
+        { status: 500 },
+      )
+    }
+
+    const imageId = uuidv4() + '.' + (image.type.split('/')[1] ?? image.type)
+    const buffedImage = Buffer.from(await image.arrayBuffer())
+    await s3
+      .putObject({
+        Bucket: 'images',
+        Key: imageId,
+        Body: buffedImage,
+      })
+      .promise()
     await prisma.animal.create({
       data: {
         specie,
@@ -57,7 +90,7 @@ export async function POST(request: Request) {
         size,
         breed,
         tag,
-        imageUrl,
+        imageUrl: process.env.NEXT_PUBLIC_BUCKET_URL! + imageId,
         localId,
       },
     })

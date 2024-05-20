@@ -5,9 +5,9 @@ import { toast } from 'sonner'
 import { apiClient } from '../api-client'
 import { petsRoute } from '../routes'
 import { petQueryKeys } from './pet-query-keys'
-import { Pet } from './use-edit-pet'
 
-const createPetFn = async (newPet: Pet) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const createPetFn = async (newPet: any) => {
   const response = await apiClient.post(petsRoute, newPet)
   return response.data
 }

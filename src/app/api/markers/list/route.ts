@@ -6,19 +6,16 @@ import { prisma } from '@/services/database'
 export async function GET() {
   try {
     const session = await getServerSessionWithAuth()
-    console.log(session)
     if (!session || !session.user?.email) {
       return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
         status: 401,
       })
     }
-    console.log(session.user)
 
     const userDB = await prisma.user.findFirst({
       where: { email: session.user.email },
       select: { id: true },
     })
-    console.log(userDB)
     if (!userDB || !userDB.id) {
       return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
         status: 401,
