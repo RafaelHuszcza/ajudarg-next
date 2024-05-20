@@ -16,7 +16,6 @@ export async function GET() {
       where: { email: session.user.email },
       select: { id: true },
     })
-    
     if (!userDB || !userDB.id) {
       return new NextResponse(JSON.stringify({ error: 'unauthorized' }), {
         status: 401,

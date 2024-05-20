@@ -8,7 +8,6 @@ import { DataGrid } from './data-grid'
 
 export function PetsGridClient() {
   const { data: pets, isLoading, isSuccess } = usePets()
-  
   return (
     <div className="flex w-full flex-1 flex-col p-10">
       {isLoading && <p>Carregando...</p>}
