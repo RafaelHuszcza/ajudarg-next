@@ -28,14 +28,14 @@ interface PetCardProps {
 }
 export function PetsCard({ pet }: PetCardProps) {
   return (
-    <div className="flex h-[720px] w-full flex-1 flex-col overflow-hidden rounded-md border shadow-md sm:h-[380px] sm:flex-row">
+    <div className="flex h-[740px] w-full flex-1 flex-col overflow-hidden rounded-md border shadow-md sm:h-[380px] sm:flex-row">
       <img
         src={pet.imageUrl}
         alt={`Imagem de um ${pet.specie} de cor ${pet.color} e raça ${pet.breed}`}
         className="h-1/2 w-full object-cover sm:h-full sm:w-3/5"
       />
       <div className="mt-2 flex flex-col p-2">
-        <span className="rounded-md bg-primary px-2 py-0.5">{pet.specie}</span>
+        <span className="rounded-md bg-primary px-2 py-0.5">{pet.tag}</span>
         <div className="flex flex-col p-2">
           <h3 className="text-md mt-1 font-bold">Informações detalhadas</h3>
           <span className="pl-2 text-sm">Idade: {pet.age}</span>
@@ -43,9 +43,6 @@ export function PetsCard({ pet }: PetCardProps) {
           <span className="pl-2 text-sm">Cor: {pet.color}</span>
           <span className="pl-2 text-sm">
             Raça: {pet.breed ? pet.breed : 'Não definida'}
-          </span>
-          <span className="pl-2 text-sm">
-            Nome: {pet.tag ? pet.tag : 'Não definida'}
           </span>
           <span className="pl-2 text-sm">Sexo: {pet.gender}</span>
         </div>

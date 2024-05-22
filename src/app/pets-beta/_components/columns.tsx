@@ -12,7 +12,6 @@ export const columns: ColumnDef<Pets>[] = [
   },
   {
     accessorKey: 'size',
-
     enableSorting: false,
     enableHiding: false,
   },
@@ -30,5 +29,15 @@ export const columns: ColumnDef<Pets>[] = [
     accessorKey: 'local',
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: 'age',
+    enableSorting: true,
+    enableHiding: true,
+  },
+  {
+    accessorKey: 'gender',
+    enableSorting: true,
+    enableHiding: true,
   },
 ]

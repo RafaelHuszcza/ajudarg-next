@@ -35,6 +35,9 @@ export function DataGrid<TData, TValue>({
 
   return (
     <div className="h-[80vh] space-y-4">
+      <h3 className="mt-[-1.2rem] text-center text-2xl font-semibold">
+        Doguinhos da enchente para Adoção ❤️ 🐶
+      </h3>
       <DataGridToolbar table={table} />
       <div className="grid h-[calc(100%-4rem)] w-full grid-cols-1 gap-4 overflow-auto sm:grid-cols-2">
         {table.getRowModel().rows?.length > 0 &&

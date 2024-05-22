@@ -17,7 +17,7 @@ export function Header() {
   const navigation = [
     { name: 'Telefones', href: '/telefones' },
     { name: 'Grupos', href: '/grupos' },
-    // { name: 'Pets', href: '/pets' },
+    // { name: 'Pets para adoção', href: '/pets' },
   ]
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
