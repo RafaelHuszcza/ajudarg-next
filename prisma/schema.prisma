@@ -61,13 +61,17 @@ model Local {
 }
 
 model Animal {
-  id       String  @id @default(cuid())
-  imageUrl String
-  local    Local   @relation(fields: [localId], references: [id])
-  localId  String
-  tag      String?
-  breed    String?
-  specie   String
-  size     String
-  color    String
+  id         String  @id @default(cuid())
+  imageUrl   String
+  local      Local   @relation(fields: [localId], references: [id])
+  localId    String
+  tag        String?
+  breed      String?
+  specie     String
+  size       String
+  color      String
+  ownerName  String  @default("")
+  ownerPhone String  @default("")
+  gender     String?
+  age        String?
 }

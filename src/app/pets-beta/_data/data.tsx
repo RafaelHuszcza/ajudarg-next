@@ -11,4 +11,12 @@ export const filters = [
     label: 'Cor',
     value: 'color',
   },
+  {
+    label: 'Idade',
+    value: 'age',
+  },
+  {
+    label: 'Sexo',
+    value: 'gender',
+  },
 ]

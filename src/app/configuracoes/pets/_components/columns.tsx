@@ -73,6 +73,70 @@ export const columns: ColumnDef<Pet>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: 'age',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Idade" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="px-1 text-center font-medium">
+          {row.getValue('age')}
+        </div>
+      )
+    },
+    id: 'age',
+    enableSorting: true,
+    enableHiding: false,
+  },
+  {
+    accessorKey: 'gender',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Sexo" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="px-1 text-center font-medium">
+          {row.getValue('gender')}
+        </div>
+      )
+    },
+    id: 'gender',
+    enableSorting: true,
+    enableHiding: false,
+  },
+  {
+    accessorKey: 'ownerName',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Responsável" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="px-1 text-center font-medium">
+          {row.getValue('size')}
+        </div>
+      )
+    },
+    id: 'ownerName',
+    enableSorting: true,
+    enableHiding: false,
+  },
+  {
+    accessorKey: 'ownerPhone',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Telefone" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="px-1 text-center font-medium">
+          {row.getValue('size')}
+        </div>
+      )
+    },
+    id: 'ownerPhone',
+    enableSorting: true,
+    enableHiding: false,
+  },
+  {
     accessorKey: 'tag',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Tag" />

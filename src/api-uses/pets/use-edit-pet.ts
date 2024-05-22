@@ -14,6 +14,8 @@ export interface Pet {
   breed?: string
   tag?: string
   localId: string
+  ownerName: string
+  ownerPhone: string
 }
 export function useEditPet() {
   const { id } = useParams()

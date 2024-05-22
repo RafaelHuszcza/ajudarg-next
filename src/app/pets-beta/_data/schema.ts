@@ -14,6 +14,10 @@ export const petsSchema = z.object({
     name: z.string(),
     address: z.string(),
   }),
+  ownerName: z.string(),
+  ownerPhone: z.string(),
+  gender: z.string().optional(),
+  age: z.string().optional(),
 })
 
 export type Pets = z.infer<typeof petsSchema>

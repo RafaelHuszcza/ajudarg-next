@@ -66,6 +66,10 @@ export async function PUT(
     tag: z.string({ required_error: 'Tamanho é necessário' }).optional(),
     imageUrl: z.string(),
     localId: z.string(),
+    ownerName: z.string(),
+    ownerPhone: z.string(),
+    gender: z.string().optional(),
+    age: z.string().optional(),
   })
   type FormData = z.infer<typeof petSchema>
 
@@ -85,6 +89,10 @@ export async function PUT(
       tag: pet.tag,
       imageUrl: pet.imageUrl,
       localId: pet.localId,
+      ownerName: pet.ownerName,
+      ownerPhone: pet.ownerPhone,
+      gender: pet.gender,
+      age: pet.age,
     },
   })
 
@@ -198,6 +206,10 @@ export async function GET(
     tag: string | null
     imageUrl: string
     localId: string
+    ownerName: string
+    ownerPhone: string
+    gender: string | null
+    age: string | null
   }
 
   const data: BFFpet = { ...pet }

@@ -36,6 +36,10 @@ interface FormPet {
     tag: string
     imageUrl: string
     localId: string
+    ownerName: string
+    ownerPhone: string
+    gender: string
+    age: string
   }
 }
 const formSchema = z
@@ -48,6 +52,14 @@ const formSchema = z
     image: z.any().optional(),
     imageUrl: z.string().optional(),
     localId: z.string({ required_error: 'O abrigo é obrigatório' }),
+    ownerName: z.string({
+      required_error: 'O campo responsável é obrigatório',
+    }),
+    ownerPhone: z.string({
+      required_error: 'O campo telefone do responsável é obrigatório',
+    }),
+    gender: z.string().optional(),
+    age: z.string().optional(),
   })
   .refine((form) => form.imageUrl || form?.image.length, {
     message: 'Foto é obrigatória',
@@ -71,6 +83,10 @@ export function AddPetForm({ method, defaultValues }: FormPet) {
       tag: defaultValues?.tag ?? '',
       imageUrl: defaultValues?.imageUrl ?? '',
       localId: defaultValues?.localId ?? '',
+      ownerName: defaultValues?.ownerName ?? '',
+      ownerPhone: defaultValues?.ownerPhone ?? '',
+      gender: defaultValues?.gender ?? '',
+      age: defaultValues?.age ?? '',
     },
   })
 
@@ -181,6 +197,62 @@ export function AddPetForm({ method, defaultValues }: FormPet) {
           </div>
 
           <div className="relative  min-w-[277px] space-y-2">
+            <Label htmlFor="lng">Idade</Label>
+            <Input
+              id="lng"
+              placeholder="Insira o tamano do pet"
+              {...register('age')}
+            />
+            <ErrorMessage
+              className="absolute bottom-[-22px] m-0 p-0"
+              errors={errors}
+              name="age"
+            />
+          </div>
+
+          <div className="relative  min-w-[277px] space-y-2">
+            <Label htmlFor="lng">Sexo</Label>
+            <Input
+              id="lng"
+              placeholder="Insira o tamano do pet"
+              {...register('gender')}
+            />
+            <ErrorMessage
+              className="absolute bottom-[-22px] m-0 p-0"
+              errors={errors}
+              name="gender"
+            />
+          </div>
+
+          <div className="relative  min-w-[277px] space-y-2">
+            <Label htmlFor="lng">Responsável</Label>
+            <Input
+              id="lng"
+              placeholder="Insira o tamano do pet"
+              {...register('ownerName')}
+            />
+            <ErrorMessage
+              className="absolute bottom-[-22px] m-0 p-0"
+              errors={errors}
+              name="ownerName"
+            />
+          </div>
+
+          <div className="relative  min-w-[277px] space-y-2">
+            <Label htmlFor="lng">Telefone do responsável</Label>
+            <Input
+              id="lng"
+              placeholder="Insira o tamano do pet"
+              {...register('ownerPhone')}
+            />
+            <ErrorMessage
+              className="absolute bottom-[-22px] m-0 p-0"
+              errors={errors}
+              name="ownerPhone"
+            />
+          </div>
+
+          <div className="relative  min-w-[277px] space-y-2">
             <Label htmlFor="type">Raça (opcional)</Label>
             <Input
               id="type"
@@ -195,7 +267,7 @@ export function AddPetForm({ method, defaultValues }: FormPet) {
           </div>
 
           <div className="relative  min-w-[277px] space-y-2">
-            <Label htmlFor="type">Tag (opcional)</Label>
+            <Label htmlFor="type">Nome (opcional)</Label>
             <Input
               id="type"
               placeholder="Insira a Tag do pet"

@@ -25,8 +25,19 @@ export async function POST(request: Request) {
         status: 401,
       })
     }
-    const { specie, color, size, breed, tag, imageUrl, localId } =
-      await request.json()
+    const {
+      specie,
+      color,
+      size,
+      breed,
+      tag,
+      imageUrl,
+      localId,
+      ownerName,
+      ownerPhone,
+      gender,
+      age,
+    } = await request.json()
 
     const userDB = await prisma.user.findFirst({
       where: { email: session.user.email },
@@ -59,6 +70,10 @@ export async function POST(request: Request) {
         tag,
         imageUrl,
         localId,
+        ownerName,
+        ownerPhone,
+        gender,
+        age,
       },
     })
     return NextResponse.json({ message: 'Pet cadastrado com sucesso' })
