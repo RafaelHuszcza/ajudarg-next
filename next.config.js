@@ -4,6 +4,13 @@ const nextConfig = {
     config.externals = [...config.externals, 'bcrypt']
     return config
   },
+  reactStrictMode: false,
+  output: 'standalone',
+  experimental: {
+    staleTimes: {
+      dynamic: 0,
+    },
+  },
   async headers() {
     return [
         {
